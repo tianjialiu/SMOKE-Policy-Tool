@@ -1,20 +1,24 @@
 # SMOKE-Policy-Tool
-SMOKE Policy Tool in Google Earth Engine
+SMOKE Policy Tool in Google Earth Engine (Last updated: August 15, 2018).
 
 ## Public Apps
-1. [**Smoke Policy Tool UI**](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool): main tool to model and project the impact of Indonesian fires on public health in Equatorial Asia for 2005-2029 based on land cover/ land use (LULC) classification, Global Fire Emissions Database, version 4s (GFEDv4s) fire emissions, and meteorology
-2. [**Indonesia LULC Maps UI**](https://smokepolicytool.users.earthengine.app/view/indonesia-lulc-maps): ancillary tool to visualize land use/ land cover (LULC) classification and locations of concessions and conservation areas
+1. [**Smoke Policy Tool UI**](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool): main tool for modeling and projecting the impact of Indonesian fires on public health in Equatorial Asia for 2005-2029 based on land cover/ land use (LULC) classification, Global Fire Emissions Database, version 4s (GFEDv4s) fire emissions, and meteorology
+2. [**Indonesia LULC Maps UI**](https://smokepolicytool.users.earthengine.app/view/indonesia-lulc-maps): ancillary tool for visualizing land use/ land cover (LULC) classification and locations of concessions and conservation areas
 
-### Step 1: Scenario Year (*2025-2029*)
+### Step 1: Scenario Year
+*Select a year from 2005-2029.* The scenario year is linked to projections of LULC transitions in 5-year intervals; for example, all scenarios using any input year from 2005-2009 involve the same LULC transitions. Because we use 2005 and 2010 as the base LULC timesteps of the 2005-2009 LULC transitions, we consider 2005-2009 as "present" and 2010-2029 as "future."
 
-### Step 2: Meteorology Year (*2005-2009*)
+### Step 2: Meteorology Year
+*Select a meteorology year from 2005-2009.* The rainfall ranks (0 = driest, 10 = wettest), which should guide your selection, are derived from mean TRMM precipitation rates over Sumatra and Kalimantan during the fire season (July-October), from 1998-2017. Dry years, such as 2006 (strong El Niño year), are generally associated with more intense fire activity and haze. If the scenario year is from 2005-2009, the meteorology year should match the scenario year.
 
-### Step 3: Select Receptor (*Indonesia, Singapore, or Malaysia*)
+### Step 3: Receptor
+*Select a population-weighted receptor: Indonesia, Singapore, or Malaysia.* A receptor is a location of interest that may be sensitive to pollutants upwind. In this case, the tool estimates and projects the public health impacts in Indonesia, Singapore, or Malaysia based on its respective sensitivity to upwind smoke from fires in Indonesia.
 
 ### Step 4. (Optional) Build a custom scenario by blocking fire emissions in select regions
-In custom scenarios, fire activity can be blocked in a combination of concessions (Oil Palm, Timber, Logging), other regions/ conservation areas (Peatlands, Conservation Areas, and BRG Sites), and Indonesia provinces.
+In custom scenarios, fire activity can be blocked in a combination of concessions (Oil Palm, Timber, Logging), other regions/ conservation areas (Peatlands, Conservation Areas, and BRG Sites), and Indonesia provinces. Indonesia provinces must be selected by IDs. As an example, if you want to select Aceh and Riau, write in the widget: 0,24.
 
-| ID | Sumatra | ID | Kalimantan | ID | Rest of Indonesia |
+### Indonesia Provinces by IDs
+| ID | Sumatera | ID | Kalimantan | ID | Rest of Indonesia |
 | :---: | :--- | :---: | :--- | :---: | :--- |
 | 0 | Aceh | 12 | Kalimantan Barat | 1 | Bali |
 | 2 | Bangka-Belitung | 13 | Kalimantan Selatan | 3 | Banten |
@@ -37,10 +41,38 @@ In custom scenarios, fire activity can be blocked in a combination of concession
 |   |   |   |   | 29 | Sulawesi Utara |
 |   |   |   |   | 33 | Yogyakarta |
 
+### Indonesia Provinces by IDs (English Names)
+| ID | Sumatra | ID | Kalimantan | ID | Rest of Indonesia |
+| :---: | :--- | :---: | :--- | :---: | :--- |
+| 0 | Aceh | 12 | West Kalimantan | 1 | Bali |
+| 2 | Bangka-Belitung | 13 | South Kalimantan | 3 | Banten |
+| 8 | Jambi | 14 | Central Kalimantan| 4 | Bengkulu |
+| 17 | Riau Islands | 15 | East Kalimantan | 5 | Gorontalo |
+| 18 | Lampung | 16 | North Kalimantan | 6 | West Papua |
+| 24 | Riau |   |   | 7 | Greater Jakarta |
+| 30 | West Sumatra |   |   | 9 | West Java |
+| 31 | South Sumatra |   |   | 10 | Central Java |
+| 32 | North Sumatra |   |   | 11 | East Java |
+|   |   |   |   | 19 | North Maluku |
+|   |   |   |   | 20 | Maluku |
+|   |   |   |   | 21 | West Nusa Tenggara |
+|   |   |   |   | 22 | South Nusa Tenggara |
+|   |   |   |   | 23 | Papua |
+|   |   |   |   | 25 | West Sulawesi |
+|   |   |   |   | 26 | South Sulawesi |
+|   |   |   |   | 27 | Central Sulawesi |
+|   |   |   |   | 28 | Southeast Sulawesi |
+|   |   |   |   | 29 | North Sulawesi |
+|   |   |   |   | 33 | Yogyakarta |
 
-## Google Earth Engine Code Editor
-### Step 1: Sign up for a free Google Earth Engine account (*For new Google Earth Engine users*)
-Google Earth Engine ([GEE](https://earthengine.google.com/)) is a powerful cloud-computing platform for geospatial analysis and capable of computations with petabyte-scale datasets. To sign up, simply fill out a [form](https://signup.earthengine.google.com/) and wait for an email. GEE works best with the Google Chrome browser.
+### Public Health Impacts
+After submitting a scenario, legends will display on the left panel, map layers will display in the middle panel, and three charts will be generated in the right panel: 1. Timeseries of PM<sub>2.5</sub> exposure at the receptor, 2. Pie chart of PM<sub>2.5</sub> contributions by Indonesia province, and 3. Table of attributable mortality comparing the current scenario and business-as-usual (BAU) scenario.
+
+
+## Google Earth Engine Code Editor GUI
+(*Google Earth Engine account required*)
+### Step 1: Sign up for a free Google Earth Engine account
+Google Earth Engine ([GEE](https://earthengine.google.com/)) is a powerful cloud-computing platform for geospatial analysis and capable of computations with petabyte-scale datasets. To sign up, simply fill out a [form](https://signup.earthengine.google.com/) and wait for an email. GEE works best with the [Google Chrome web browser](https://www.google.com/chrome/).
 
 ### Step 2: The SMOKE Policy Tool repository
 Copy and paste the following link in a tab in Google Chrome to enter the [GEE Javascript playground](https://code.earthengine.google.com/) and add the SMOKE Policy Tool public repository to your account under the read-only permissions folder in one step:
