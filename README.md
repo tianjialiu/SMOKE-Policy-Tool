@@ -15,7 +15,7 @@ SMOKE Policy Tool in Google Earth Engine (Last updated: August 15, 2018).
 *Select a population-weighted receptor: Indonesia, Singapore, or Malaysia.* A receptor is a location of interest that may be sensitive to pollutants upwind. In this case, the tool estimates and projects the public health impacts in Indonesia, Singapore, or Malaysia based on its respective sensitivity to upwind smoke from fires in Indonesia.
 
 ### Step 4. (Optional) Build a custom scenario by blocking fire emissions in select regions
-In custom scenarios, fire activity can be blocked in a combination of concessions (Oil Palm, Timber, Logging), other regions/ conservation areas (Peatlands, Conservation Areas, and BRG Sites), and Indonesia provinces. Indonesia provinces must be selected by IDs. As an example, if you want to select Aceh and Riau, write in the widget: 0,24.
+In custom scenarios, fire activity can be blocked in a combination of concessions (Oil Palm, Timber, Logging), other regions/ conservation areas (Peatlands, Conservation Areas, and BRG Sites), and Indonesia provinces. Badan Restorasi Gambu (BRG) sites were recently established following the 2015 severe haze event to restore the hydrology of damaged peatlands in Sumatra, Kalimantan, and Papua over a five-year period (https://brg.go.id). Indonesia provinces must be selected by IDs; as an example, to select Aceh and Riau, write in the widget: 0,24.
 
 ### Indonesia Provinces by IDs
 | ID | Sumatera | ID | Kalimantan | ID | Rest of Indonesia |
@@ -86,7 +86,7 @@ Click the 'UI_SMOKEPolicyTool' script in the 'users/smokepolicytool/public' repo
 
 
 ## Publications
-1. Marlier, M.E., T. Liu, K. Yu, J.J. Buonocore, S.N. Koplitz, R.S. DeFries, L.J. Mickley, D.J. Jacob, J.Schwartz, B.S. Wardhana, and S. S. Myers (in prep). Fires, Smoke Exposure, and Public Health: An Integrative Framework to Maximize Health Benefits from Peatland Restoration.
+1. Marlier, M.E., T. Liu, K. Yu, J.J. Buonocore, S.N. Koplitz, R.S. DeFries, L.J. Mickley, D.J. Jacob, J. Schwartz, B.S. Wardhana, and S.S. Myers (in prep). Fires, Smoke Exposure, and Public Health: An Integrative Framework to Maximize Health Benefits from Peatland Restoration.
 
 2. Koplitz, S.N., L.J. Mickley, M.E. Marlier, J.J. Buonocore, P.S. Kim, T. Liu, M.P. Sulprizio, R.S. DeFries, D.J. Jacob, J. Schwartz, and S.S. Myers (2016). Public health impacts of the severe haze in Equatorial Asia in September–October 2015: demonstration of a new framework for informing fire management strategies to reduce downwind smoke exposure. *Environ. Res. Lett.* 11(9), 094023. https://doi.org/10.1088/1748-9326/11/9/094023
 
