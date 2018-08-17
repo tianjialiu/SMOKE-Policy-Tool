@@ -1,7 +1,10 @@
 # SMOKE-Policy-Tool
-SMOKE Policy Tool in Google Earth Engine (Last updated: August 15, 2018).
+SMOKE Policy Tool in Google Earth Engine (Last updated: August 16, 2018).
+
+- *Note*: The SMOKE Policy Tool can be accessed from 1) Earth Engine Apps and 2) a read-only public repository in the Google Earth Engine (GEE) code editor. Earth Engine Apps is currently an experimental product and does not support special characters and EE 'require' functions. Accessing the UI from the 'users/smokepolicytool/public' repository in the GEE code editor is more stable and interactive but requires a (free) GEE account.
 
 ## Public Apps
+(*Earth Engine Apps, no Google Earth Engine account required*)
 1. [**Smoke Policy Tool UI**](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool): main tool for modeling and projecting the impact of Indonesian fires on public health in Equatorial Asia for 2005-2029 based on land cover/ land use (LULC) classification, Global Fire Emissions Database, version 4s (GFEDv4s) fire emissions, and meteorology
 2. [**Indonesia LULC Maps UI**](https://smokepolicytool.users.earthengine.app/view/indonesia-lulc-maps): ancillary tool for visualizing land use/ land cover (LULC) classification and locations of concessions and conservation areas
 
@@ -66,8 +69,8 @@ In custom scenarios, fire activity can be blocked in a combination of concession
 |   |   |   |   | 33 | Yogyakarta |
 
 ### Public Health Impacts
-After submitting a scenario, legends will display on the left panel, map layers will display in the middle panel, and three charts will be generated in the right panel: 1. Timeseries of PM<sub>2.5</sub> exposure at the receptor, 2. Pie chart of PM<sub>2.5</sub> contributions by Indonesia province, and 3. Table of attributable mortality comparing the current scenario and business-as-usual (BAU) scenario.
-
+After submitting a scenario, legends will display on the left panel, map layers will display in the middle panel, and three charts will be generated in the right panel: 1. Timeseries of PM<sub>2.5</sub> exposure at the receptor, 2. Pie chart of PM<sub>2.5</sub> contributions by Indonesia province, and 3. Table of attributable mortality comparing the current scenario and business-as-usual (BAU) scenario. Map layers can be turned on and off from the 'Layers' dropdown list; currently, if you switch to 'Satellite' view, you must toggle the map layers off and on again to view them.
+<br><br>
 
 ## Google Earth Engine Code Editor GUI
 (*Google Earth Engine account required*)
@@ -82,8 +85,7 @@ https://code.earthengine.google.com/?accept_repo=users/smokepolicytool/public
 The repository should then appear in the top-left panel under 'Reader' as 'users/smokepolicytool/public'. The GEE Javascript playground is a code editor with a map and console to display or print results.
 
 ### Step 3: Diving into the GUI
-Click the 'UI_SMOKEPolicyTool' script in the 'users/smokepolicytool/public' repository. The script should appear in the code editor. Click 'Run' in the top-right corner of the code editor to activate the UI.
-
+Click the 'UI_SMOKEPolicyTool.js' script in the 'users/smokepolicytool/public' repository. The script should appear in the code editor. Click 'Run' in the top-right corner of the code editor to activate the UI.
 
 ## Publications
 1. Marlier, M.E., T. Liu, K. Yu, J.J. Buonocore, S.N. Koplitz, R.S. DeFries, L.J. Mickley, D.J. Jacob, J. Schwartz, B.S. Wardhana, and S.S. Myers (in prep). Fires, Smoke Exposure, and Public Health: An Integrative Framework to Maximize Health Benefits from Peatland Restoration.

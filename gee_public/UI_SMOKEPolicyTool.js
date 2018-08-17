@@ -4,6 +4,10 @@
 // =================================================================
 // *****************************************************************
 /*
+// Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
+// Author: Tianjia Liu
+// Last updated: August 16, 2018
+
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
 // land cover/ land use (LULC) classification, GFEDv4s fire emissions,
@@ -35,7 +39,7 @@
 // legends will display below 'Submit Scenario' in the left panel;
 // public health charts will display in the right panel
 
-// Last updated: August 9, 2018
+// Last updated: August 16, 2018
 
 // -----------
 //  - Code - |
@@ -97,6 +101,7 @@ var plotPanelParent = ui.Panel([plotParams.plotPanelLabel, plotPanel], null, {wi
 var map = ui.Map();
 map.style().set({cursor:'crosshair'});
 map.setCenter(110,-2,5);
+map.setControlVisibility({mapTypeControl: false, fullscreenControl: false});
 
 var csn_csvList = [['Oil Palm','OP'], ['Timber','TM'], ['Logging','LG'],
   ['Peatlands','PT'], ['Conservation Areas','CA'], ['BRG Sites','BRG']];
@@ -106,7 +111,7 @@ csn_csvList.forEach(function(name, index) {
   csn_csvBox.push(checkBox);
 });
 
-var provBox = ui.Textbox("See console, valid IDs 0-33: e.g., '1,3'");
+var provBox = ui.Textbox("See console, valid IDs 0-33: e.g., 1,3");
 provBox.style().set('stretch', 'horizontal');
 
 var submitButton = plotParams.submitButton();
@@ -125,6 +130,7 @@ controlPanel.add(receptorSelectPanel);
 plotParams.csn_csvPanel(csn_csvBox,controlPanel);
 controlPanel.add(provPanel);
 controlPanel.add(submitButton);
+controlPanel.add(plotParams.waitMessage);
 ui.root.clear(); ui.root.add(controlPanel);
 ui.root.add(map); ui.root.add(plotPanelParent);
 
@@ -170,7 +176,8 @@ submitButton.onClick(function() {
     {palette: smokeHealth.mortalityColRamp, max: 10},'Baseline Mortality 2005', false);
   map.addLayer(inMask.mean(),{palette: ['#000000','#FFFFFF'],
     min: 0, max: 1, opacity: 0.4},'Design Scenario Mask', false);
-  
+  map.setControlVisibility({mapTypeControl: false, fullscreenControl: false});
+
   // Display Charts:
   var PMts = smokePM.getPM(inputYear,metYear,receptor,inMask);
   var PMts_BAU = smokePM.getPM(inputYear,metYear,receptor,bauMask);

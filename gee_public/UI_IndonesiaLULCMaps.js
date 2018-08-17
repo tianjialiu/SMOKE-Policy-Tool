@@ -5,6 +5,9 @@
 // =================================================================
 // *****************************************************************
 
+// Author: Tianjia Liu
+// Last updated: August 16, 2018
+
 // UI LULC Maps adapted and modified from code by Gennadii Donchyts
 // (https://code.earthengine.google.com/f0011ae8554cf924176fd7a931a38add)
 
@@ -45,13 +48,15 @@ var conservation_ramp = ['#800080','#000000'];
 var maps = [];
 panelNames.forEach(function(name, index) {
   var map = ui.Map();
-
+  map.setControlVisibility({layerList: false, fullscreenControl: false, mapTypeControl: false});
+  
   if (index === 0) {
     map.addLayer(lulcMapTS1.selfMask(),smokeLULC.lulc_pal,'LULC, 2005');
     map.addLayer(lulcMapTS2.selfMask(),smokeLULC.lulc_pal,'LULC, 2010');
     map.add(plotParams.discreteLegendMap('Land Use/ Land Cover',
       ['Intact Forest','Degraded Forest','Non-Forest','Plantations + Secondary Forest'],
       smokeLULC.lulc_rampReorder));
+    map.setControlVisibility({layerList: true});
   }
   if (index == 1) {
     map.addLayer(stableTrans.selfMask(),smokeLULC.lulcTrans_pal,'LULC Stable/Transitions');

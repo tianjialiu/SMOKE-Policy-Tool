@@ -11,6 +11,7 @@ var smokeHealth = require('users/smokepolicytool/public:Modules/smokeHealth.js')
 // ------------
 exports.yearPanel = function() {
   var policyToolLabel = ui.Label('SMOKE Policy Tool', {margin: '12px 0px 0px 8px', fontWeight: 'bold', fontSize: '24px', border: '1px solid black', padding: '3px 3px 3px 3px'});
+  var githubRepoLabel = ui.Label('Documentation: github.com/tianjialiu/SMOKE-Policy-Tool', {margin: '8px 8px 5px 8px', fontSize: '12.5px'});
   var inputYearSectionLabel = ui.Label('Design Scenario', {margin: '8px 8px 5px 8px', fontWeight: 'bold', fontSize: '20px'});
   
   var inputYearLabel = ui.Label('1) Scenario Year:', {fontSize: '14.5px'});
@@ -27,7 +28,7 @@ exports.yearPanel = function() {
     {margin: '3px 0px 8px 17px', color: '#999', fontSize: '13.5px'});
   
   return ui.Panel([
-      policyToolLabel, inputYearSectionLabel,
+      policyToolLabel, githubRepoLabel, inputYearSectionLabel,
       ui.Panel([inputYearLabel, inputYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}), //
       ui.Panel([metYearLabel, metYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}),
       metYearDescription, metYearRanking
@@ -36,8 +37,8 @@ exports.yearPanel = function() {
 
 exports.getYears = function(yearPanel) {
   return {
-    inputYear:yearPanel.widgets().get(2).widgets().get(1).getValue(),
-    metYear:yearPanel.widgets().get(3).widgets().get(1).getValue()
+    inputYear:yearPanel.widgets().get(3).widgets().get(1).getValue(),
+    metYear:yearPanel.widgets().get(4).widgets().get(1).getValue()
   };
 };
 
@@ -100,6 +101,8 @@ exports.provPanel = function(provBox) {
 exports.submitButton = function() {
   return ui.Button({label: 'Submit Scenario',  style: {stretch: 'horizontal'}});
 };
+
+exports.waitMessage = ui.Label(' *** Computations will take a few seconds to be completed *** ', {margin: '-4px 8px 12px 8px', fontSize: '11.6px', textAlign: 'center', stretch: 'horizontal'});
 
 // --------
 // Legends
@@ -167,7 +170,7 @@ var continuousLegend = function(controlPanel, title, colPal, minVal,
 };
 
 exports.legendPanel = function(controlPanel) {
-  controlPanel.add(ui.Label('----------------------------------------------------------------------------------', {margin: '2px 8px 8px 8px', stretch: 'horizontal'}));
+  controlPanel.add(ui.Label('----------------------------------------------------------------------------------', {margin: '-10px 8px 12px 8px', stretch: 'horizontal'}));
   controlPanel.add(ui.Label('Legends', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 8px 8px'}));
 
   discreteLegend(controlPanel,'Land Use/ Land Cover',
@@ -203,7 +206,7 @@ exports.discreteLegendMap = function(title, labels, colPal) {
     }
   });
    
-  var legendTitle = ui.Label(title, {fontWeight: 'bold', fontSize: '16px', margin: '6px 0 4px 0'});
+  var legendTitle = ui.Label(title, {fontWeight: 'bold', fontSize: '18px', margin: '6px 0 4px 0'});
   discreteLegendPanel.add(legendTitle);
   
   var makeRow = function(colPal, labels) {
@@ -212,7 +215,7 @@ exports.discreteLegendMap = function(title, labels, colPal) {
         backgroundColor: colPal,
         padding: '8px',
         margin: '0 0 6px 0',
-        fontSize: '13.5px',
+        fontSize: '14px',
       }
     });
 

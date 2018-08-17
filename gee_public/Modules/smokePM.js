@@ -246,9 +246,9 @@ exports.getPMchart = function(PMts,PMavg,OCtot,BCtot,plotPanel) {
   plotPanel = plotPanel.clear();
   var PMchart = ui.Chart.feature.byFeature(PMts,'system:time_start','Smoke_PM2p5')
     .setOptions({
-      title: 'Population-Weighted Smoke PM₂․₅ Exposure',
+      title: 'Population-Weighted Smoke PM2.5 Exposure',
       hAxis: {'format':'MMM'},
-      vAxis: {title: 'Smoke PM₂․₅ (μg/m³)'},
+      vAxis: {title: 'Smoke PM2.5 (μg/m³)'},
       legend: 'none',
       lineWidth: 2,
       pointSize: 5,
@@ -274,7 +274,7 @@ exports.getPMContrByProvChart = function(PMmap,plotPanel) {
     PMprov.sort('sum',false),'NAME','sum')
     .setChartType('PieChart')
     .setOptions({
-      title: 'Smoke PM₂․₅ Contribution by Province',
+      title: 'Smoke PM2.5 Contribution by Province',
       legend: 'NAME_1'
     });
   plotPanel.add(PMProvChart);

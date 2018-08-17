@@ -4,38 +4,14 @@
 // =================================================================
 // *****************************************************************
 
+// Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: August 15, 2018
+// Last updated: August 16, 2018
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
 // land cover/ land use (LULC) classification, GFEDv4s fire emissions,
 // and meteorology
-
-// To start: click 'Run' above the code editor to initialize the
-// user interface
-
-// Business-As-Usual (BAU) scenarios (Steps 1-3):
-// ||Step 1|| Choose an input year: 2005-2029
-// ||Step 2|| Choose an emissions + meteorology year: 2005-2009
-// ||Step 3|| Choose a receptor (population-weighted): Singapore, Indonesia, Malaysia
-
-// ||Step 4|| *Optional* Build custom scenarios by selecting concessions,
-// conservation regions, and administrative areas to reduce fires:
-
-// 1. Oil Palm, 2. Timber, 3. Logging (Concessions)
-// 4. Peatlands, 5. Conservation Areas, 6. BRG Sites (Other Regions/Conservation)
-// * 'UI LULC Maps' can be used to visualize the locations of
-// land use/ land cover, concessions, and conservation areas *
-
-// 7. Indonesian Provinces (see console for list of ID codes with
-// province names after UI loads)
-
-// ||Step 5|| Submit Scenario: the script will freeze for ~5-10 seconds
-// as Google Earth Engine makes the necessary computations:
-// map layers will display in the center panel;
-// legends will display below 'Submit Scenario' in the left panel;
-// public health charts will display in the right panel
 
 // -----------
 //  - Code - |
@@ -43,31 +19,6 @@
 // * SMOKE policy tool Javascript code was adapted from 
 //   Python code developed by Karen Yu (https://github.com/kyu0110/policy-tool)
 // * UI functions were adapted and modified from LandTrendr-GEE UI (https://emapr.github.io/LT-GEE/index.html)
-
-// ------------------
-// - Publications - |
-// ------------------
-// 1. Marlier, M.E. et al. (in prep). Fires, Smoke Exposure, and Public Health:
-// An Integrative Framework to Maximize Health Benefits from Peatland Restoration
-
-// 2. Koplitz, S.N. et al. (2016). Public health impacts of the severe haze in
-// Equatorial Asia in September–October 2015: demonstration of a new framework for
-// informing fire management strategies to reduce downwind smoke exposure.
-// Environ. Res. Lett. 11(9), 094023. https://doi.org/10.1088/1748-9326/11/9/094023
-
-// 3. Kim, P.S. et al. (2015). Sensitivity of population smoke exposure to fire
-// locations in Equatorial Asia. Atmos. Environ. 102, 11-17. https://doi.org/10.1016/j.atmosenv.2014.09.045
-
-// ------------------------
-//  - Contact/Questions - |
-// ------------------------
-// Help with SMOKE policy tool, technical questions and report bugs:
-// Tianjia Liu (tianjialiu@g.harvard.edu)
-
-// General science questions:
-// Miriam Marlier (mmarlier@rand.org)
-// Ruth DeFries (rd2402@columbia.edu)
-// Loretta Mickley (mickley@fas.harvard.edu)
 
 // ==========================================================
 // *****************   --    Modules    --   ****************
@@ -174,8 +125,6 @@ var getMask = function(csn_csvList, provList, metYear) {
   }
   return ee.ImageCollection(masksYr);
 };
-
-var IDN_adm1_masks_names = IDN_adm1_masks.bandNames();
 
 // =============
 // Display Maps
@@ -296,7 +245,7 @@ var imageToFeature = function(inImage,inRegion) {
   return ee.Feature(inImageCol);
 };
 
-// Monthly average OC + BC emissions (μg/m2/s)
+// Monthly average OC + BC emissions (ug/m2/s)
 var getEmissMon = function(inMonth,inYear,inSens,inArea,inAreaSum,inMask) {
   var filterYr = ee.Filter.calendarRange(inYear,inYear,'year');
   var filterMon = ee.Filter.calendarRange(inMonth,inMonth,'month');
@@ -316,7 +265,7 @@ var getEmissMon = function(inMonth,inYear,inSens,inArea,inAreaSum,inMask) {
   var oc_emiss = emissMon.multiply(oc_ef_LULCtr).reduce(ee.Reducer.sum()); 
   var bc_emiss = emissMon.multiply(bc_ef_LULCtr).reduce(ee.Reducer.sum());
   
-  // OC + BC conversion from (g/grid cell/month) to (μg/m2/s)
+  // OC + BC conversion from (g/grid cell/month) to (ug/m2/s)
   var emissMonTotal = oc_emiss.add(bc_emiss).multiply(maskMon)
     .divide(inAreaSum).multiply(1e6).divide(nDays).divide(sf_timeDay)
     .reproject({crs: crsLatLon, crsTransform: gfed_gridRes});
@@ -324,7 +273,7 @@ var getEmissMon = function(inMonth,inYear,inSens,inArea,inAreaSum,inMask) {
   return emissMonTotal;
 };
 
-// Smoke PM2.5 exposure (μg/m3), monthly [Emissions Rate x Sensitivity]
+// Smoke PM2.5 exposure (ug/m3), monthly [Emissions Rate x Sensitivity]
 var getEmissReceptorMon = function(inMonth,inYear,inSens,inArea,inAreaSum,inMask) {
   var filterYr = ee.Filter.calendarRange(inYear,inYear,'year');
   var filterMon = ee.Filter.calendarRange(inMonth,inMonth,'month');
@@ -354,26 +303,26 @@ var getEmissReceptorMon = function(inMonth,inYear,inSens,inArea,inAreaSum,inMask
   var emiss_philic = oc_philic.add(bc_philic).rename('b1');
   var emiss_phobic = oc_phobic.add(bc_phobic).rename('b2');
   
-  // 1. Convert OC + BC emissions from g/grid cell/month to μg/m2/day
+  // 1. Convert OC + BC emissions from g/grid cell/month to ug/m2/day
   var emissPart = emiss_philic.addBands(emiss_phobic)
     .multiply(1e6).divide(inAreaSum).divide(nDays)
     .reproject({crs: crsLatLon, crsTransform: gfed_gridRes});
     
   // 2. Convert downscaled accumulated monthly sensitivity (0.25deg) from
-  // (μg/m3)/(kg/grid cell/timestep) to (μg/m3)/(μg/m2/day)
+  // (ug/m3)/(kg/grid cell/timestep) to (ug/m3)/(ug/m2/day)
   var sensPart = sensMon.multiply(gfedArea).multiply(1e-9)
     .divide(sf_timeSteps).divide(sf_smokePMtracer).divide(nDays)
     .reproject({crs: crsLatLon, crsTransform: gfed_gridRes});
     
   // 3. Multiply OC + BC emissions rate by sensitivity
-  // for smoke PM2.5 concentrations (μg m-3)
+  // for smoke PM2.5 concentrations (ug/m3)
   var emissReceptorMon = emissPart.multiply(sensPart).reduce(ee.Reducer.sum())
     .multiply(maskMon).reproject({crs: crsLatLon, crsTransform: gfed_gridRes});
   
   return emissReceptorMon;
 };
 
-// Smoke PM2.5 exposure (micrograms/m3), monthly time series
+// Smoke PM2.5 exposure (ug/m3), monthly time series
 var getPM = function(inputYear,metYear,receptor,inMask) {
   var inArea = ee.Image(areaLULCtr.filter(ee.Filter.calendarRange(inputYear-4,inputYear,'year')).first());
   var areaSum = inArea.reduce(ee.Reducer.sum());
@@ -393,7 +342,7 @@ var getPM = function(inputYear,metYear,receptor,inMask) {
 // =============
 // Display Maps
 // =============
-// Sensitivity, hydrophilic only, Jul-Oct average (μg m-3/g m-2 s-1)
+// Sensitivity, hydrophilic only, Jul-Oct average (ug/m3)/(g/m2/s)
 // Adjoint hydrophilic and hydrophobic sensitivities have similar spatial variability
 var getSensMap = function(metYear,receptor) {
   var inSens = getSensitivity(receptor,adjointFolder);
@@ -415,8 +364,8 @@ var getSensMap = function(metYear,receptor) {
 
 var sensColRamp = ['#FFFFFF','#C7E6F8','#8DBEE2','#5990BB','#64A96C','#A9CB65',
   '#F4D46A','#E58143','#D14D36','#B1322E','#872723'];
-
-// PM2.5 exposure, Jul-Oct average (μg m-3)
+  
+// PM2.5 exposure, Jul-Oct average (ug/m3)
 var getPMmap = function(inputYear,metYear,receptor,inMask) {
   var inArea = ee.Image(areaLULCtr.filter(ee.Filter.calendarRange(inputYear-4,inputYear,'year')).first());
   var areaSum = inArea.reduce(ee.Reducer.sum());
@@ -437,7 +386,7 @@ var getPMmap = function(inputYear,metYear,receptor,inMask) {
 var PMRamp = ['#FFFFFF','#F7F7F7','#D9D9D9','#BDBDBD',
   '#969696','#636363','#252525','#000000'];
 
-// OC + BC Emissions, Jul-Oct average (μg m-2 s-1)
+// OC + BC Emissions, Jul-Oct average (ug/m2/s)
 var getEmissMap = function(inputYear,metYear,receptor,inMask) {
   var inArea = ee.Image(areaLULCtr.filter(ee.Filter.calendarRange(inputYear-4,inputYear,'year')).first());
   var areaSum = inArea.reduce(ee.Reducer.sum());
@@ -461,21 +410,21 @@ var emissColRamp = ['#FFFFFF','#FFFFB2','#FED976','#FEB24C','#FD8D3C',
 // ===============
 // Display Charts
 // ===============
-// Smoke PM2.5 (μg m-3) time series, monthly average
+// Smoke PM2.5 (ug/m3) time series, monthly average
 var getPMchart = function(PMts,PMavg,OCtot,BCtot,plotPanel) {
   plotPanel = plotPanel.clear();
   var PMchart = ui.Chart.feature.byFeature(PMts,'system:time_start','Smoke_PM2p5')
     .setOptions({
-      title: 'Population-Weighted Smoke PM₂․₅ Exposure',
+      title: 'Population-Weighted Smoke PM2.5 Exposure',
       hAxis: {'format':'MMM'},
-      vAxis: {title: 'Smoke PM₂․₅ (μg/m³)'},
+      vAxis: {title: 'Smoke PM2.5 (ug/m3)'},
       legend: 'none',
       lineWidth: 2,
       pointSize: 5,
     });
   plotPanel.add(PMchart);
 
-  plotPanel.add(ui.Label('Jul-Oct Mean PM2.5: ' + PMavg.getInfo() + ' μg/m³',
+  plotPanel.add(ui.Label('Jul-Oct Mean PM2.5: ' + PMavg.getInfo() + ' ug/m3',
     {margin: '-10px 0px -5px 25px', padding: '0px 0px 8px 0px', stretch: 'horizontal'}));
   plotPanel.add(ui.Label('Jul-Oct Total OC: ' + OCtot.getInfo() + ' Tg | Total BC: ' + BCtot.getInfo() + ' Tg',
     {margin: '0px 0px -5px 25px', padding: '0px 0px 10px 0px', stretch: 'horizontal'}));
@@ -494,7 +443,7 @@ var getPMContrByProvChart = function(PMmap,plotPanel) {
     PMprov.sort('sum',false),'NAME','sum')
     .setChartType('PieChart')
     .setOptions({
-      title: 'Smoke PM₂․₅ Contribution by Province',
+      title: 'Smoke PM2.5 Contribution by Province',
       legend: 'NAME_1'
     });
   plotPanel.add(PMProvChart);
@@ -503,7 +452,7 @@ var getPMContrByProvChart = function(PMmap,plotPanel) {
 // =============
 // Display Text
 // =============
-// Jul-Oct average PM2.5 exposure (μg m-3)
+// Jul-Oct average PM2.5 exposure (ug/m3)
 var getPMavg = function(inputYear,metYear,receptor,inMask) {
   var inArea = ee.Image(areaLULCtr.filter(ee.Filter.calendarRange(inputYear-4,inputYear,'year')).first());
   var areaSum = inArea.reduce(ee.Reducer.sum());
@@ -578,7 +527,7 @@ var mortality_rate = {
   'adult': {'Indonesia': 1011.9828048701391, 'Malaysia': 815.8937975144682, 'Singapore': 655.2733557232674}
 };
 
-// Concentration response function transitions from linear to exponential at 50 μg/m3
+// Concentration response function transitions from linear to exponential at 50 ug/m3
 var breakPt = 50;
 
 // Adult (age 25+) attributable mortality calculated from annual smoke PM2.5
@@ -743,6 +692,7 @@ var getMortalityChart = function(PMts, PMts_BAU, receptor, plotPanel) {
 // ------------
 var yearPanel = function() {
   var policyToolLabel = ui.Label('SMOKE Policy Tool', {margin: '12px 0px 0px 8px', fontWeight: 'bold', fontSize: '24px', border: '1px solid black', padding: '3px 3px 3px 3px'});
+  var githubRepoLabel = ui.Label('Documentation: github.com/tianjialiu/SMOKE-Policy-Tool', {margin: '8px 8px 5px 8px', fontSize: '12.5px'});
   var inputYearSectionLabel = ui.Label('Design Scenario', {margin: '8px 8px 5px 8px', fontWeight: 'bold', fontSize: '20px'});
   
   var inputYearLabel = ui.Label('1) Scenario Year:', {fontSize: '14.5px'});
@@ -759,7 +709,7 @@ var yearPanel = function() {
     {margin: '3px 0px 8px 17px', color: '#999', fontSize: '13.5px'});
   
   return ui.Panel([
-      policyToolLabel, inputYearSectionLabel,
+      policyToolLabel, githubRepoLabel, inputYearSectionLabel,
       ui.Panel([inputYearLabel, inputYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}), //
       ui.Panel([metYearLabel, metYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}),
       metYearDescription, metYearRanking
@@ -768,8 +718,8 @@ var yearPanel = function() {
 
 var getYears = function(yearPanel) {
   return {
-    inputYear:yearPanel.widgets().get(2).widgets().get(1).getValue(),
-    metYear:yearPanel.widgets().get(3).widgets().get(1).getValue()
+    inputYear:yearPanel.widgets().get(3).widgets().get(1).getValue(),
+    metYear:yearPanel.widgets().get(4).widgets().get(1).getValue()
   };
 };
 
@@ -833,6 +783,8 @@ var submitButton = function() {
   return ui.Button({label: 'Submit Scenario',  style: {stretch: 'horizontal'}});
 };
 
+var waitMessage = ui.Label(' *** Computations will take a few seconds to be completed *** ', {margin: '-4px 8px 12px 8px', fontSize: '11.6px', textAlign: 'center', stretch: 'horizontal'});
+  
 // --------
 // Legends
 // --------
@@ -899,7 +851,7 @@ var continuousLegend = function(controlPanel, title, colPal, minVal,
 };
 
 var legendPanel = function(controlPanel) {
-  controlPanel.add(ui.Label('----------------------------------------------------------------------------------', {margin: '2px 8px 8px 8px', stretch: 'horizontal'}));
+  controlPanel.add(ui.Label('----------------------------------------------------------------------------------', {margin: '-10px 8px 12px 8px', stretch: 'horizontal'}));
   controlPanel.add(ui.Label('Legends', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 8px 8px'}));
 
   discreteLegend(controlPanel,'Land Use/ Land Cover',
@@ -912,16 +864,16 @@ var legendPanel = function(controlPanel) {
   
   controlPanel.add(ui.Label('', {margin: '0px 0px 4px 0px'}));
   continuousLegend(controlPanel,'GEOS-Chem Adjoint Sensitivity',
-    sensColRamp, 0, '10⁵', 'Jul-Oct Average, (μg m⁻³) / (g m⁻² s⁻¹)', 13.8, 291);
+    sensColRamp, 0, '1e5', 'Jul-Oct Average, (ug/m3) / (g/m2/s)', 13.8, 287);
   
   continuousLegend(controlPanel,'PM2.5 Exposure',
-    PMRamp, 0, 20, 'Jul-Oct Average, μg m⁻³, scaled by 100', 18.975, 293);
+    PMRamp, 0, 20, 'Jul-Oct Average, ug/m3, scaled by 100', 18.975, 293);
     
   continuousLegend(controlPanel,'OC + BC Emissions',
-    emissColRamp, 0, 5, 'Jul-Oct Average, μg m⁻² s⁻¹', 18.975, 300);
+    emissColRamp, 0, 5, 'Jul-Oct Average, ug/m2/s', 18.975, 300);
   
   continuousLegend(controlPanel,'Population Density, 2005',
-    popColRamp, 0, 1000, 'people km⁻²', 18.975, 279);
+    popColRamp, 0, 1000, 'people/km2', 18.975, 279);
   
   continuousLegend(controlPanel,'Baseline Mortality, 2005',
     mortalityColRamp, 0, 10, 'people in thousands', 18.975, 293);
@@ -953,6 +905,7 @@ var plotPanelParent = ui.Panel([plotPanelLabel, plotPanel], null, {width: '400px
 var map = ui.Map();
 map.style().set({cursor:'crosshair'});
 map.setCenter(110,-2,5);
+map.setControlVisibility({fullscreenControl: false});
 
 var csn_csvList = [['Oil Palm','OP'], ['Timber','TM'], ['Logging','LG'],
   ['Peatlands','PT'], ['Conservation Areas','CA'], ['BRG Sites','BRG']];
@@ -962,7 +915,7 @@ csn_csvList.forEach(function(name, index) {
   csn_csvBox.push(checkBox);
 });
 
-var provBox = ui.Textbox("See GitHub repo, valid IDs 0-33: e.g. '1,3'");
+var provBox = ui.Textbox("See GitHub repo, valid IDs 0-33: e.g., 1,3");
 provBox.style().set('stretch', 'horizontal');
 
 var submitButton = submitButton();
@@ -971,19 +924,15 @@ var receptorSelectPanel = receptorSelectPanel();
 var provPanel = provPanel(provBox);
 var clickCounter = 0;
 
-if (clickCounter === 0) {
-  print('Indonesian Provinces'); print(IDN_adm1_masks_names);
-}
-
 // Display Panels
 controlPanel.add(yearPanel);
 controlPanel.add(receptorSelectPanel);
 csn_csvPanel(csn_csvBox,controlPanel);
 controlPanel.add(provPanel);
 controlPanel.add(submitButton);
+controlPanel.add(waitMessage);
 ui.root.clear(); ui.root.add(controlPanel);
 ui.root.add(map); ui.root.add(plotPanelParent);
-map.setControlVisibility(false);
 
 // Run calculations, linked to submit button
 submitButton.onClick(function() {
@@ -1027,9 +976,7 @@ submitButton.onClick(function() {
     {palette: mortalityColRamp, max: 10},'Baseline Mortality 2005', false);
   map.addLayer(inMask.mean(),{palette: ['#000000','#FFFFFF'],
     min: 0, max: 1, opacity: 0.4},'Design Scenario Mask', false);
-  
-  map.setControlVisibility(false);
-  map.setControlVisibility({layerList: true});
+  map.setControlVisibility({fullscreenControl: false});
 
   // Display Charts:
   var PMts = getPM(inputYear,metYear,receptor,inMask);

@@ -6,7 +6,7 @@
 // *****************************************************************
 
 // Author: Tianjia Liu
-// Last updated: August 15, 2018
+// Last updated: August 16, 2018
 
 // Indonesia LULC Maps UI adapted and modified from code by Gennadii Donchyts
 // (https://code.earthengine.google.com/f0011ae8554cf924176fd7a931a38add)
@@ -89,7 +89,7 @@ var discreteLegendMap = function(title, labels, colPal) {
         backgroundColor: colPal,
         padding: '8px',
         margin: '0 0 6px 0',
-        fontSize: '13.5px',
+        fontSize: '14px',
       }
     });
 
@@ -135,14 +135,15 @@ var conservation_ramp = ['#800080','#000000'];
 var maps = [];
 panelNames.forEach(function(name, index) {
   var map = ui.Map();
-  map.setControlVisibility(false);
-
+  map.setControlVisibility({layerList: false, fullscreenControl: false, mapTypeControl: false});
+  
   if (index === 0) {
     map.addLayer(lulcMapTS1.selfMask(),lulc_pal,'LULC, 2005');
-    map.addLayer(lulcMapTS2.selfMask(),lulc_pal,'LULC, 2010');
+    map.addLayer(lulcMapTS2.selfMask(),lulc_pal,'LULC, 2010',false);
     map.add(discreteLegendMap('Land Use/ Land Cover',
       ['Intact Forest','Degraded Forest','Non-Forest','Plantations + Secondary Forest'],
       lulc_rampReorder));
+    map.setControlVisibility({layerList: true});
   }
   if (index == 1) {
     map.addLayer(stableTrans.selfMask(),lulcTrans_pal,'LULC Stable/Transitions');
