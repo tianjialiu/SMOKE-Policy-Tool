@@ -6,7 +6,12 @@ SMOKE Policy Tool in Google Earth Engine (Last updated: August 16, 2018).
 ## Public Apps
 (*Earth Engine Apps, no Google Earth Engine account required*)
 1. [**Smoke Policy Tool UI**](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool): main tool for modeling and projecting the impact of Indonesian fires on public health in Equatorial Asia for 2005-2029 based on land cover/ land use (LULC) classification, Global Fire Emissions Database, version 4s (GFEDv4s) fire emissions, and meteorology
+<br><br>
+![banner image](https://github.com/tianjialiu/SMOKE-Policy-Tool/blob/master/docs/imgs/SMOKEPolicyTool_EEApps.jpeg)
+
 2. [**Indonesia LULC Maps UI**](https://smokepolicytool.users.earthengine.app/view/indonesia-lulc-maps): ancillary tool for visualizing land use/ land cover (LULC) classification and locations of concessions and conservation areas
+<br><br>
+![banner image](https://github.com/tianjialiu/SMOKE-Policy-Tool/blob/master/docs/imgs/IndonesiaLULCMaps_EEApps.jpeg)
 
 ### Step 1: Scenario Year
 *Select a year from 2005-2029.* The scenario year is linked to projections of LULC transitions in 5-year intervals; for example, all scenarios using any input year from 2005-2009 involve the same LULC transitions. Because we use 2005 and 2010 as the base LULC timesteps of the 2005-2009 LULC transitions, we consider 2005-2009 as "present" and 2010-2029 as "future."
@@ -86,10 +91,12 @@ The repository should then appear in the top-left panel under 'Reader' as 'users
 
 ### Step 3: Diving into the GUI
 Click the 'UI_SMOKEPolicyTool.js' script in the 'users/smokepolicytool/public' repository. The script should appear in the code editor. Click 'Run' in the top-right corner of the code editor to activate the UI.
+<br><br>
+![banner image](https://github.com/tianjialiu/SMOKE-Policy-Tool/blob/master/docs/imgs/SMOKEPolicyTool_GEE.jpeg)
 
 ## Publications
 1. Marlier, M.E., T. Liu, K. Yu, J.J. Buonocore, S.N. Koplitz, R.S. DeFries, L.J. Mickley, D.J. Jacob, J. Schwartz, B.S. Wardhana, and S.S. Myers (in prep). Fires, Smoke Exposure, and Public Health: An Integrative Framework to Maximize Health Benefits from Peatland Restoration.
 
 2. Koplitz, S.N., L.J. Mickley, M.E. Marlier, J.J. Buonocore, P.S. Kim, T. Liu, M.P. Sulprizio, R.S. DeFries, D.J. Jacob, J. Schwartz, and S.S. Myers (2016). Public health impacts of the severe haze in Equatorial Asia in September–October 2015: demonstration of a new framework for informing fire management strategies to reduce downwind smoke exposure. *Environ. Res. Lett.* 11(9), 094023. https://doi.org/10.1088/1748-9326/11/9/094023
 
-3. Kim, P.S., D.J. Jacob, L.J. Mickley, S.N. Koplitz, M.E. Marlier, R.S. DeFries, S.S. Myers, B.N. Chew, Y.H. Mao (2015). Sensitivity of population smoke exposure to fire locations in Equatorial Asia. *Atmos. Environ.* 102, 11-17. https://doi.org/10.1016/j.atmosenv.2014.09.045
+3. Kim, P.S., D.J. Jacob, L.J. Mickley, S.N. Koplitz, M.E. Marlier, R.S. DeFries, S.S. Myers, B.N. Chew, and Y.H. Mao (2015). Sensitivity of population smoke exposure to fire locations in Equatorial Asia. *Atmos. Environ.* 102, 11-17. https://doi.org/10.1016/j.atmosenv.2014.09.045
