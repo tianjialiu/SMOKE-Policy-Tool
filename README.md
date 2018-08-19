@@ -1,5 +1,5 @@
 # SMOKE-Policy-Tool
-SMOKE Policy Tool in Google Earth Engine (Last updated: August 16, 2018).
+SMOKE Policy Tool in Google Earth Engine
 
 - *Note*: The SMOKE Policy Tool can be accessed from 1) Earth Engine Apps and 2) a read-only public repository in the Google Earth Engine (GEE) code editor. Earth Engine Apps is currently an experimental product and does not support special characters and EE 'require' functions. Accessing the UI from the 'users/smokepolicytool/public' repository in the GEE code editor is more stable and interactive but requires a (free) GEE account.
 

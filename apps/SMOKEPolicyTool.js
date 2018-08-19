@@ -208,12 +208,13 @@ var LULCtr = ['IN2IN_NP', 'IN2DG_NP', 'IN2NF_NP', 'IN2PL_NP',
 
 // OC and BC emissions factors from GFEDv4s (g OC, BC/ kg DM)
 // 1. SAVA, 2. BORF, 3. TEMF 4. DEFO, 5. Peat, 6. AGRI
-var oc_ef = [2.62, 9.6, 9.6, 4.71, 6.02, 2.3]; // g OC per kg DM
-var bc_ef = [0.37, 0.5, 0.5, 0.52, 0.04, 0.75]; // g BC per kg DM
+// 7. SAVA-DEFO weighted avg.
+var oc_ef = [2.62, 9.6, 9.6, 4.71, 6.02, 2.3, 4.07]; // g OC per kg DM
+var bc_ef = [0.37, 0.5, 0.5, 0.52, 0.04, 0.75, 0.47]; // g BC per kg DM
 
 // Match Margono + Hansen LULC transitions to GFEDv4s LULC
 // to apply emissions factors on DM emissions
-var gfed_index = [3, 3, 3, 3, 3, 3, 3, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4];
+var gfed_index = [3, 3, 3, 3, 3, 3, 3, 0, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4];
 
 // Format OC and BC emissions factors to the emissions rates layers
 var oc_ef_LULCtr = ee.Image([]); var bc_ef_LULCtr = ee.Image([]);
