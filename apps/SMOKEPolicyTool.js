@@ -716,9 +716,9 @@ var yearPanel = function() {
   
   var metYearDescription = ui.Label('Jul-Oct Rainfall Rank: 0 (driest) - 10 (wettest)',
     {margin: '1px 0px 0px 25px', color: '#888', fontSize: '13.8px', fontWeight:'410'});
-  var metYearRanking = ui.Label('2005: [6], 2006: [0.5], 2007: [7], 2008: [9], 2009: [2]',
-    {margin: '3px 0px 8px 17px', color: '#999', fontSize: '13.5px'});
-  
+  var metYearRanking = ui.Label('2005: [6.5], 2006: [1.5], 2007: [6], 2008: [9], 2009: [3]',
+    {margin: '3px 0px 8px 12px', color: '#999', fontSize: '13.5px'});
+    
   return ui.Panel([
       policyToolLabel, githubRepoLabel, inputYearSectionLabel,
       ui.Panel([inputYearLabel, inputYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}), //

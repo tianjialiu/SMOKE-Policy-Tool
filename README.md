@@ -5,7 +5,7 @@ SMOKE Policy Tool in Google Earth Engine
 
 ## Public Apps
 (*Earth Engine Apps, no Google Earth Engine account required*)
-1. [**Smoke Policy Tool UI**](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool): main tool for modeling and projecting the impact of Indonesian fires on public health in Equatorial Asia for 2005-2029 based on land cover/ land use (LULC) classification, Global Fire Emissions Database, version 4s (GFEDv4s) fire emissions, and meteorology
+1. [**Smoke Policy Tool UI**](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool): main tool for modeling and projecting the impact of Indonesian fires on public health in Equatorial Asia for 2005-2029 based on land cover/ land use (LULC) classification, Global Fire Emissions Database, version 4s ([GFEDv4s](https://www.globalfiredata.org/)) fire emissions, and meteorology
 <br><br>
 ![banner image](https://github.com/tianjialiu/SMOKE-Policy-Tool/blob/master/docs/imgs/SMOKEPolicyTool_EEApps.jpeg)
 
@@ -17,7 +17,7 @@ SMOKE Policy Tool in Google Earth Engine
 *Select a year from 2005-2029.* The scenario year is linked to projections of LULC transitions in 5-year intervals; for example, all scenarios using any input year from 2005-2009 involve the same LULC transitions. Because we use 2005 and 2010 as the base LULC timesteps of the 2005-2009 LULC transitions, we consider 2005-2009 as "present" and 2010-2029 as "future."
 
 ### Step 2: Meteorology Year
-*Select a meteorology year from 2005-2009.* The rainfall ranks (0 = driest, 10 = wettest), which should guide your selection, are derived from mean TRMM precipitation rates over Sumatra and Kalimantan during the fire season (July-October), from 1998-2017. Dry years, such as 2006 (strong El Niño year), are generally associated with more intense fire activity and haze. If the scenario year is from 2005-2009, the meteorology year should match the scenario year.
+*Select a meteorology year from 2005-2009.* The rainfall ranks (0 = driest, 10 = wettest), which should guide your selection, are derived from mean [CHIRPS](http://chg.geog.ucsb.edu/data/chirps/) daily precipitation rates over Sumatra and Kalimantan during the fire season (July-October), from 1981-2017. Dry years, such as 2006 (strong El Niño year), are generally associated with more intense fire activity and haze. If the scenario year is from 2005-2009, the meteorology year should match the scenario year.
 
 ### Step 3: Receptor
 *Select a population-weighted receptor: Indonesia, Singapore, or Malaysia.* A receptor is a location of interest that may be sensitive to pollutants upwind. In this case, the tool estimates and projects the public health impacts in Indonesia, Singapore, or Malaysia based on its respective sensitivity to upwind smoke from fires in Indonesia.
