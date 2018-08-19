@@ -6,7 +6,7 @@
 // *****************************************************************
 
 // Author: Tianjia Liu
-// Last updated: August 16, 2018
+// Last updated: August 19, 2018
 
 // UI LULC Maps adapted and modified from code by Gennadii Donchyts
 // (https://code.earthengine.google.com/f0011ae8554cf924176fd7a931a38add)
@@ -17,6 +17,9 @@
 var plotParams = require('users/smokepolicytool/public:Modules/plotParams.js');
 var smokeLULC = require('users/smokepolicytool/public:Modules/smokeLULC.js');
 
+// ------------
+// Map Panels |
+// ------------
 var panelNames = [
   'LULC Classification',
   'LULC Transitions',

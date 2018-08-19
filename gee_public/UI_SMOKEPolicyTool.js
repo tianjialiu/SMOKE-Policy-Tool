@@ -6,7 +6,7 @@
 /*
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: August 16, 2018
+// Last updated: August 19, 2018
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
@@ -38,8 +38,6 @@
 // map layers will display in the center panel;
 // legends will display below 'Submit Scenario' in the left panel;
 // public health charts will display in the right panel
-
-// Last updated: August 16, 2018
 
 // -----------
 //  - Code - |
@@ -101,7 +99,7 @@ var plotPanelParent = ui.Panel([plotParams.plotPanelLabel, plotPanel], null, {wi
 var map = ui.Map();
 map.style().set({cursor:'crosshair'});
 map.setCenter(110,-2,5);
-map.setControlVisibility({mapTypeControl: false, fullscreenControl: false});
+map.setControlVisibility({fullscreenControl: false});
 
 var csn_csvList = [['Oil Palm','OP'], ['Timber','TM'], ['Logging','LG'],
   ['Peatlands','PT'], ['Conservation Areas','CA'], ['BRG Sites','BRG']];
@@ -118,6 +116,7 @@ var submitButton = plotParams.submitButton();
 var yearPanel = plotParams.yearPanel();
 var receptorSelectPanel = plotParams.receptorSelectPanel();
 var provPanel = plotParams.provPanel(provBox);
+var provOptionsPanel = plotParams.provOptionsPanel();
 var clickCounter = 0;
 
 if (clickCounter === 0) {
@@ -128,6 +127,7 @@ if (clickCounter === 0) {
 controlPanel.add(yearPanel);
 controlPanel.add(receptorSelectPanel);
 plotParams.csn_csvPanel(csn_csvBox,controlPanel);
+controlPanel.add(provOptionsPanel);
 controlPanel.add(provPanel);
 controlPanel.add(submitButton);
 controlPanel.add(plotParams.waitMessage);
@@ -147,9 +147,10 @@ submitButton.onClick(function() {
   // BAU or Custom Scenario:
   var allChecked = plotParams.getChecked(csn_csvBox,csn_csvList);
   var provSelected = provBox.getValue(); if (provSelected === '') {provSelected = undefined}
+  var provOptions = plotParams.getProvOptions(provOptionsPanel);
 
-  var inMask = smokeLULC.getMask(allChecked,provSelected,metYear);
-  var bauMask = smokeLULC.getMask([],undefined,metYear);
+  var inMask = smokeLULC.getMask(allChecked,provSelected,provOptions,metYear);
+  var bauMask = smokeLULC.getMask([],undefined,provOptions,metYear);
 
   // Display Maps:
   var lulcMap = smokeLULC.getLULCmaps(inputYear).toList(2,0);
@@ -176,7 +177,7 @@ submitButton.onClick(function() {
     {palette: smokeHealth.mortalityColRamp, max: 10},'Baseline Mortality 2005', false);
   map.addLayer(inMask.mean(),{palette: ['#000000','#FFFFFF'],
     min: 0, max: 1, opacity: 0.4},'Design Scenario Mask', false);
-  map.setControlVisibility({mapTypeControl: false, fullscreenControl: false});
+  map.setControlVisibility({fullscreenControl: false});
 
   // Display Charts:
   var PMts = smokePM.getPM(inputYear,metYear,receptor,inMask);

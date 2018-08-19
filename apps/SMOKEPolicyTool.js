@@ -6,7 +6,7 @@
 
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: August 16, 2018
+// Last updated: August 19, 2018
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
@@ -70,7 +70,7 @@ var provIds = ee.List.sequence(0,33,1)
 
 // Make masks for user-designed scenarios using any checked
 // concessions/conservation areas and selected provinces
-var getMask = function(csn_csvList, provList, metYear) {
+var getMask = function(csn_csvList, provList, provOptions, metYear) {
   var filterYr = ee.Filter.calendarRange(metYear, metYear, 'year');
   var masksYrAll = IDN_masks.filter(filterYr);
   var masksYr = ee.ImageCollection(masksYrAll.select('BAU'));
@@ -82,7 +82,7 @@ var getMask = function(csn_csvList, provList, metYear) {
     masksYr = ee.List.sequence(0,11,1).map(function(iMonth) {
       var masksMon = ee.Image(prevMasks.get(iMonth));
       return masksMon.subtract(ee.Image(masksBRG.get(iMonth)))
-        .clamp(0,1).rename('Custom')
+        .clamp(0,1).rename('Custom').reproject({crs: crsLatLon, crsTransform: gfed_gridRes})
         .set('system:time_start',masksMon.get('system:time_start'));
     });
     masksYr = ee.ImageCollection(masksYr);
@@ -103,7 +103,7 @@ var getMask = function(csn_csvList, provList, metYear) {
     masksYr = ee.List.sequence(0,11,1).map(function(iMonth) {
       var masksMon = ee.Image(prevMasks.get(iMonth));
       return masksMon.subtract(ee.Image(CSN_CSV.get(iMonth)))
-        .clamp(0,1).rename('Custom')
+        .clamp(0,1).rename('Custom').reproject({crs: crsLatLon, crsTransform: gfed_gridRes})
         .set('system:time_start',masksMon.get('system:time_start'));
     });
     masksYr = ee.ImageCollection(masksYr);
@@ -116,11 +116,21 @@ var getMask = function(csn_csvList, provList, metYear) {
       .map(function(x) {return provIds.indexOf(x)});
     var PROV = IDN_adm1_masks.select(provList)
       .reduce(ee.Reducer.max()).clamp(0,1);
+    var maskBounds = ee.Image(masksYrAll.first().select('BAU'));
     
     masksYr = ee.List.sequence(0,11,1).map(function(iMonth) {
       var masksMon = ee.Image(prevMasks.get(iMonth));
-      return masksMon.subtract(PROV).clamp(0,1).rename('Custom')
-        .set('system:time_start',masksMon.get('system:time_start'));
+      if (provOptions === 'Block all fires') {
+        return masksMon.subtract(PROV).clamp(0,1).rename('Custom')
+          .reproject({crs: crsLatLon, crsTransform: gfed_gridRes})
+          .set('system:time_start',masksMon.get('system:time_start'));
+      }
+      if (provOptions === 'Target conservation efforts') {
+        return masksMon.multiply(PROV.selfMask())
+          .unmask(1).updateMask(maskBounds).clamp(0,1).rename('Custom')
+          .reproject({crs: crsLatLon, crsTransform: gfed_gridRes})
+          .set('system:time_start',masksMon.get('system:time_start'));
+      }
     });
   }
   return ee.ImageCollection(masksYr);
@@ -757,9 +767,7 @@ var csn_csvPanel = function(csn_csvBox, controlPanel) {
     ui.Panel([csn_csvBox[4]], null, {margin: '-11px -10px -2px 2px', stretch: 'horizontal'}),
     ui.Panel([csn_csvBox[5]], null, {margin: '-2px 0px -2px 18px', stretch: 'horizontal'}),
   ],
-  ui.Panel.Layout.Flow('horizontal'), {margin: '2px 0px 4px 0px', stretch: 'horizontal'}));
-  
-  controlPanel.add(ui.Label('Indonesian provinces:', {margin: '-3px 0px 0px 8px', stretch: 'horizontal'}));
+  ui.Panel.Layout.Flow('horizontal'), {margin: '2px 0px -4px 0px', stretch: 'horizontal'}));
 };
 
 var getChecked = function(box, list) {
@@ -773,7 +781,18 @@ var getChecked = function(box, list) {
 
 var provPanel = function(provBox) {
   var provLabel = ui.Label('By IDs: ', {margin: '8px 6px 8px 8px', stretch: 'vertical'});
-  return ui.Panel([provLabel,provBox], ui.Panel.Layout.Flow('horizontal'), {margin: '0px 8px 0px 8px', stretch: 'horizontal'});
+  return ui.Panel([provLabel,provBox], ui.Panel.Layout.Flow('horizontal'), {margin: '-5px 8px 0px 8px', stretch: 'horizontal'});
+};
+
+var provOptionsPanel = function() {
+  var provOptLabel = ui.Label('Indonesian provinces:', {padding: '5px 0px 0px 0px'});
+  var provOptList = ['Block all fires','Target conservation efforts'];
+  var provOptSelect = ui.Select({items: provOptList, value: 'Block all fires', style: {stretch: 'horizontal'}});
+  return ui.Panel([provOptLabel, provOptSelect], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'});
+};
+
+var getProvOptions = function(provOptionsPanel) {
+  return provOptionsPanel.widgets().get(1).getValue();
 };
 
 // -----------------
@@ -922,12 +941,14 @@ var submitButton = submitButton();
 var yearPanel = yearPanel();
 var receptorSelectPanel = receptorSelectPanel();
 var provPanel = provPanel(provBox);
+var provOptionsPanel = provOptionsPanel();
 var clickCounter = 0;
 
 // Display Panels
 controlPanel.add(yearPanel);
 controlPanel.add(receptorSelectPanel);
 csn_csvPanel(csn_csvBox,controlPanel);
+controlPanel.add(provOptionsPanel);
 controlPanel.add(provPanel);
 controlPanel.add(submitButton);
 controlPanel.add(waitMessage);
@@ -947,9 +968,10 @@ submitButton.onClick(function() {
   // BAU or Custom Scenario:
   var allChecked = getChecked(csn_csvBox,csn_csvList);
   var provSelected = provBox.getValue(); if (provSelected === '') {provSelected = undefined}
+  var provOptions = getProvOptions(provOptionsPanel);
 
-  var inMask = getMask(allChecked,provSelected,metYear);
-  var bauMask = getMask([],undefined,metYear);
+  var inMask = getMask(allChecked,provSelected,provOptions,metYear);
+  var bauMask = getMask([],undefined,provOptions,metYear);
 
   // Display Maps:
   var lulcMap = getLULCmaps(inputYear).toList(2,0);

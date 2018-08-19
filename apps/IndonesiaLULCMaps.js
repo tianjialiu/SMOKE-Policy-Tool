@@ -6,7 +6,7 @@
 // *****************************************************************
 
 // Author: Tianjia Liu
-// Last updated: August 16, 2018
+// Last updated: August 19, 2018
 
 // Indonesia LULC Maps UI adapted and modified from code by Gennadii Donchyts
 // (https://code.earthengine.google.com/f0011ae8554cf924176fd7a931a38add)

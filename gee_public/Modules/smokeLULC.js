@@ -39,7 +39,7 @@ var provIds = ee.List.sequence(0,33,1)
 
 // Make masks for user-designed scenarios using any checked
 // concessions/conservation areas and selected provinces
-exports.getMask = function(csn_csvList, provList, metYear) {
+exports.getMask = function(csn_csvList, provList, provOptions, metYear) {
   var filterYr = ee.Filter.calendarRange(metYear, metYear, 'year');
   var masksYrAll = IDN_masks.filter(filterYr);
   var masksYr = ee.ImageCollection(masksYrAll.select('BAU'));
@@ -51,7 +51,7 @@ exports.getMask = function(csn_csvList, provList, metYear) {
     masksYr = ee.List.sequence(0,11,1).map(function(iMonth) {
       var masksMon = ee.Image(prevMasks.get(iMonth));
       return masksMon.subtract(ee.Image(masksBRG.get(iMonth)))
-        .clamp(0,1).rename('Custom')
+        .clamp(0,1).rename('Custom').reproject({crs: crsLatLon, crsTransform: gfed_gridRes})
         .set('system:time_start',masksMon.get('system:time_start'));
     });
     masksYr = ee.ImageCollection(masksYr);
@@ -72,7 +72,7 @@ exports.getMask = function(csn_csvList, provList, metYear) {
     masksYr = ee.List.sequence(0,11,1).map(function(iMonth) {
       var masksMon = ee.Image(prevMasks.get(iMonth));
       return masksMon.subtract(ee.Image(CSN_CSV.get(iMonth)))
-        .clamp(0,1).rename('Custom')
+        .clamp(0,1).rename('Custom').reproject({crs: crsLatLon, crsTransform: gfed_gridRes})
         .set('system:time_start',masksMon.get('system:time_start'));
     });
     masksYr = ee.ImageCollection(masksYr);
@@ -85,11 +85,21 @@ exports.getMask = function(csn_csvList, provList, metYear) {
       .map(function(x) {return provIds.indexOf(x)});
     var PROV = IDN_adm1_masks.select(provList)
       .reduce(ee.Reducer.max()).clamp(0,1);
+    var maskBounds = ee.Image(masksYrAll.first().select('BAU'));
     
     masksYr = ee.List.sequence(0,11,1).map(function(iMonth) {
       var masksMon = ee.Image(prevMasks.get(iMonth));
-      return masksMon.subtract(PROV).clamp(0,1).rename('Custom')
-        .set('system:time_start',masksMon.get('system:time_start'));
+      if (provOptions === 'Block all fires') {
+        return masksMon.subtract(PROV).clamp(0,1).rename('Custom')
+          .reproject({crs: crsLatLon, crsTransform: gfed_gridRes})
+          .set('system:time_start',masksMon.get('system:time_start'));
+      }
+      if (provOptions === 'Target conservation efforts') {
+        return masksMon.multiply(PROV.selfMask())
+          .unmask(1).updateMask(maskBounds).clamp(0,1).rename('Custom')
+          .reproject({crs: crsLatLon, crsTransform: gfed_gridRes})
+          .set('system:time_start',masksMon.get('system:time_start'));
+      }
     });
   }
   return ee.ImageCollection(masksYr);

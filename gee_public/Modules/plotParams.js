@@ -52,7 +52,7 @@ exports.receptorSelectPanel = function() {
   return ui.Panel([receptorLabel, receptorSelect], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'});
 };
 
-exports.getReceptor = function(receptorSelectPanel){
+exports.getReceptor = function(receptorSelectPanel) {
   return receptorSelectPanel.widgets().get(1).getValue();
 };
 
@@ -76,9 +76,7 @@ exports.csn_csvPanel = function(csn_csvBox, controlPanel) {
     ui.Panel([csn_csvBox[4]], null, {margin: '-11px -10px -2px 2px', stretch: 'horizontal'}),
     ui.Panel([csn_csvBox[5]], null, {margin: '-2px 0px -2px 18px', stretch: 'horizontal'}),
   ],
-  ui.Panel.Layout.Flow('horizontal'), {margin: '2px 0px 4px 0px', stretch: 'horizontal'}));
-  
-  controlPanel.add(ui.Label('Indonesian provinces:', {margin: '-3px 0px 0px 8px', stretch: 'horizontal'}));
+  ui.Panel.Layout.Flow('horizontal'), {margin: '2px 0px -4px 0px', stretch: 'horizontal'}));
 };
 
 exports.getChecked = function(box, list) {
@@ -92,7 +90,18 @@ exports.getChecked = function(box, list) {
 
 exports.provPanel = function(provBox) {
   var provLabel = ui.Label('By IDs: ', {margin: '8px 6px 8px 8px', stretch: 'vertical'});
-  return ui.Panel([provLabel,provBox], ui.Panel.Layout.Flow('horizontal'), {margin: '0px 8px 0px 8px', stretch: 'horizontal'});
+  return ui.Panel([provLabel,provBox], ui.Panel.Layout.Flow('horizontal'), {margin: '-5px 8px 0px 8px', stretch: 'horizontal'});
+};
+
+exports.provOptionsPanel = function() {
+  var provOptLabel = ui.Label('Indonesian provinces:', {padding: '5px 0px 0px 0px'});
+  var provOptList = ['Block all fires','Target conservation efforts'];
+  var provOptSelect = ui.Select({items: provOptList, value: 'Block all fires', style: {stretch: 'horizontal'}});
+  return ui.Panel([provOptLabel, provOptSelect], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'});
+};
+
+exports.getProvOptions = function(provOptionsPanel) {
+  return provOptionsPanel.widgets().get(1).getValue();
 };
 
 // -----------------
