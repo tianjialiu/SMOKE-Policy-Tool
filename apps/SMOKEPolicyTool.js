@@ -6,7 +6,7 @@
 
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: August 19, 2018
+// Last updated: August 20, 2018
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
@@ -192,8 +192,7 @@ var emiRateLULCtr = ee.ImageCollection(assetsFolder + 'Cocktail_LULC/emiRateLULC
 var areaLULCtr = ee.ImageCollection(assetsFolder + 'Cocktail_LULC/areaLULCtr_m2');
 var gcArea = ee.Image(assetsFolder + 'area_m2/GC_grid');
 var gfedArea = ee.Image(assetsFolder + 'area_m2/GFEDv4s_grid');
-var gfedGrid = ee.Image(assetsFolder + 'IDN_adm/IDN_gfedGrid');
-
+var brgGrid = ee.FeatureCollection(assetsFolder + 'IDN_conservation/BRG_sites_gfedGrid');
 var outputRegion = ee.Geometry.Rectangle([95,-11,141,6],'EPSG:4326',false);
 var adjointFolder = assetsFolder + 'GC_adjoint_sensitivities/';
 var adjointFolder_ds = assetsFolder + 'GC_adjoint_sensitivities_0p25deg/';
@@ -394,8 +393,22 @@ var getPMmap = function(inputYear,metYear,receptor,inMask) {
     .reproject({crs: crsLatLon, crsTransform: gfed_gridRes}));
 };
 
-var PMRamp = ['#FFFFFF','#F7F7F7','#D9D9D9','#BDBDBD',
-  '#969696','#636363','#252525','#000000'];
+var PMRamp = ['#FFFFFF','#FBC127','#F67D15','#D44842',
+  '#9F2963','#65146E','#280B54','#000000'];
+
+// BRG Sites: Top 5 priority grid cells for reducing emissions
+var getBRGmap = function(PMmap) {
+  var PMbrg = PMmap.reduceRegions({
+    collection: brgGrid,
+    reducer: 'max',
+    crs: crsLatLon,
+    crsTransform: gfed_gridRes
+  }).sort('max',false);
+  
+  return ee.Image().byte().rename('BRG_Sites')
+    .paint(ee.FeatureCollection(PMbrg.toList(100,5)), 0, 2)
+    .paint(ee.FeatureCollection(PMbrg.toList(5,0)), 1, 2);
+};
 
 // OC + BC Emissions, Jul-Oct average (ug/m2/s)
 var getEmissMap = function(inputYear,metYear,receptor,inMask) {
@@ -670,7 +683,7 @@ var calcAllMortality = function(PMts, receptor, scenario) {
   var age1_4 = formatCI(mortality[3][1],mortality[3][0],mortality[3][2]);
   var age25 = formatCI(mortality[4][1],mortality[4][0],mortality[4][2]);
 
-  return ee.Feature(null, {'Scenario': scenario,'Age 0-1': age0_1, 'Age 1-4': age1_4,
+  return ee.Feature(null, {'Scenario': scenario, 'Age 0-1': age0_1, 'Age 1-4': age1_4,
     'Age 0-4': age0_4, 'Age 25+': age25});
 };
 
@@ -899,6 +912,40 @@ var legendPanel = function(controlPanel) {
     mortalityColRamp, 0, 10, 'people in thousands', 18.975, 293);
 };
 
+var brgLegend = function() {
+  var colPal = ['#00BFFF', '#000000'];
+  var labels = ['Top 5 Priority', 'Other'];
+  
+  var brgLegendPanel = ui.Panel({
+    style: {
+      padding: '2px 10px 2px 9px',
+      position: 'bottom-left'
+    }
+  });
+   
+  brgLegendPanel.add(ui.Label('BRG Sites', {fontWeight: 'bold', fontSize: '20px', margin: '6px 0 6px 0'}));
+  
+  var makeRow = function(colPal, labels) {
+    var colorBox = ui.Label({
+      style: {
+        border: 'solid 2px ' + colPal,
+        padding: '8px',
+        margin: '0px 0 9px 0',
+        fontSize: '16px',
+      }
+    });
+
+    var description = ui.Label({value: labels, style: {margin: '2px 1px 4px 6px', fontSize: '15.5px'}});
+    return ui.Panel({widgets: [colorBox, description], layout: ui.Panel.Layout.Flow('horizontal')});
+  };
+  
+  for (var i = 0; i < labels.length; i++) {
+    brgLegendPanel.add(makeRow(colPal[i], labels[i]));
+  }
+  
+  return brgLegendPanel;
+};
+
 // -----------
 // Plot Panel
 // -----------
@@ -983,7 +1030,7 @@ submitButton.onClick(function() {
   var PMExposureMap = getPMmap(inputYear,metYear,receptor,inMask);
   var emissMap = getEmissMap(inputYear,metYear,receptor,inMask);
   
-  map.clear(); map.setCenter(110,-2,5);
+  map.clear(); map.setCenter(108,-1,6);
   map.addLayer(lulcMapTS1.selfMask(),lulc_pal,'LULC Classification ' + lulcMapTS1.get('timestep').getInfo());
   map.addLayer(lulcMapTS2.selfMask(),lulc_pal,'LULC Classification ' + lulcMapTS2.get('timestep').getInfo(), false);
   map.addLayer(stableTrans.selfMask(),lulcTrans_pal,'LULC Stable/Transitions', false);
@@ -999,6 +1046,8 @@ submitButton.onClick(function() {
     {palette: mortalityColRamp, max: 10},'Baseline Mortality 2005', false);
   map.addLayer(inMask.mean(),{palette: ['#000000','#FFFFFF'],
     min: 0, max: 1, opacity: 0.4},'Design Scenario Mask', false);
+  map.addLayer(getBRGmap(PMExposureMap), {palette: '000000,00BFFF', max: 1}, 'BRG Sites');
+  map.add(brgLegend());
   map.setControlVisibility({fullscreenControl: false});
 
   // Display Charts:

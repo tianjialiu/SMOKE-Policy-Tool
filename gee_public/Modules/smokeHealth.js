@@ -158,7 +158,7 @@ var calcAllMortality = function(PMts, receptor, scenario) {
   var age1_4 = formatCI(mortality[3][1],mortality[3][0],mortality[3][2]);
   var age25 = formatCI(mortality[4][1],mortality[4][0],mortality[4][2]);
 
-  return ee.Feature(null, {'Scenario': scenario,'Age 0-1': age0_1, 'Age 1-4': age1_4,
+  return ee.Feature(null, {'Scenario': scenario, 'Age 0-1': age0_1, 'Age 1-4': age1_4,
     'Age 0-4': age0_4, 'Age 25+': age25});
 };
 

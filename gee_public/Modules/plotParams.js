@@ -26,7 +26,7 @@ exports.yearPanel = function() {
     {margin: '1px 0px 0px 25px', color: '#888', fontSize: '13.8px', fontWeight:'410'});
   var metYearRanking = ui.Label('2005: [6.5], 2006: [1.5], 2007: [6], 2008: [9], 2009: [3]',
     {margin: '3px 0px 8px 12px', color: '#999', fontSize: '13.5px'});
-    
+  
   return ui.Panel([
       policyToolLabel, githubRepoLabel, inputYearSectionLabel,
       ui.Panel([inputYearLabel, inputYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}), //
@@ -207,7 +207,7 @@ exports.legendPanel = function(controlPanel) {
     smokeHealth.mortalityColRamp, 0, 10, 'people in thousands', 18.975, 293);
 };
 
-exports.discreteLegendMap = function(title, labels, colPal) {
+exports.brgLegend = function() {
   var discreteLegendPanel = ui.Panel({
     style: {
       padding: '0 9px 2px 9px',
@@ -216,6 +216,71 @@ exports.discreteLegendMap = function(title, labels, colPal) {
   });
    
   var legendTitle = ui.Label(title, {fontWeight: 'bold', fontSize: '18px', margin: '6px 0 4px 0'});
+  discreteLegendPanel.add(legendTitle);
+  
+  var makeRow = function(colPal, labels) {
+    var colorBox = ui.Label({
+      style: {
+        border: '1px solid ' + colPal,
+        padding: '8px',
+        margin: '0 0 6px 0',
+        fontSize: '14px',
+      }
+    });
+
+    var description = ui.Label({value: labels, style: {margin: '0 0 4px 6px', fontSize: '13.5px'}});
+    return ui.Panel({widgets: [colorBox, description], layout: ui.Panel.Layout.Flow('horizontal')});
+  };
+  
+  for (var i = 0; i < labels.length; i++) {
+    discreteLegendPanel.add(makeRow(colPal[i], labels[i]));
+  }
+  return discreteLegendPanel;
+};
+
+exports.brgLegend = function() {
+  var colPal = ['#00BFFF', '#000000'];
+  var labels = ['Top 5 Priority', 'Other'];
+  
+  var brgLegendPanel = ui.Panel({
+    style: {
+      padding: '2px 10px 2px 9px',
+      position: 'bottom-left'
+    }
+  });
+   
+  brgLegendPanel.add(ui.Label('BRG Sites', {fontWeight: 'bold', fontSize: '20px', margin: '6px 0 6px 0'}));
+  
+  var makeRow = function(colPal, labels) {
+    var colorBox = ui.Label({
+      style: {
+        border: 'solid 2px ' + colPal,
+        padding: '8px',
+        margin: '0px 0 9px 0',
+        fontSize: '16px',
+      }
+    });
+
+    var description = ui.Label({value: labels, style: {margin: '2px 1px 4px 6px', fontSize: '15.5px'}});
+    return ui.Panel({widgets: [colorBox, description], layout: ui.Panel.Layout.Flow('horizontal')});
+  };
+  
+  for (var i = 0; i < labels.length; i++) {
+    brgLegendPanel.add(makeRow(colPal[i], labels[i]));
+  }
+  
+  return brgLegendPanel;
+};
+
+exports.discreteLegendMap = function(title, labels, colPal) {
+  var discreteLegendPanel = ui.Panel({
+    style: {
+      padding: '0 9px 2px 9px',
+      position: 'bottom-left'
+    }
+  });
+   
+  var legendTitle = ui.Label(title, {fontWeight: 'bold', fontSize: '18.5px', margin: '6px 0 4px 0'});
   discreteLegendPanel.add(legendTitle);
   
   var makeRow = function(colPal, labels) {

@@ -6,7 +6,7 @@
 /*
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: August 19, 2018
+// Last updated: August 20, 2018
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
@@ -33,7 +33,7 @@
 // 7. Indonesian Provinces (see console for list of ID codes with
 // province names after UI loads)
 
-// ||Step 5|| Submit Scenario: the script will freeze for ~5-10 seconds
+// ||Step 5|| Submit Scenario: the script will freeze for ~4-7 seconds
 // as Google Earth Engine makes the necessary computations:
 // map layers will display in the center panel;
 // legends will display below 'Submit Scenario' in the left panel;
@@ -161,7 +161,7 @@ submitButton.onClick(function() {
   var PMExposureMap = smokePM.getPMmap(inputYear,metYear,receptor,inMask);
   var emissMap = smokePM.getEmissMap(inputYear,metYear,receptor,inMask);
   
-  map.clear(); map.setCenter(110,-2,5);
+  map.clear(); map.setCenter(108,-1,6);
   map.addLayer(lulcMapTS1.selfMask(),smokeLULC.lulc_pal,'LULC Classification ' + lulcMapTS1.get('timestep').getInfo());
   map.addLayer(lulcMapTS2.selfMask(),smokeLULC.lulc_pal,'LULC Classification ' + lulcMapTS2.get('timestep').getInfo(), false);
   map.addLayer(stableTrans.selfMask(),smokeLULC.lulcTrans_pal,'LULC Stable/Transitions', false);
@@ -177,8 +177,10 @@ submitButton.onClick(function() {
     {palette: smokeHealth.mortalityColRamp, max: 10},'Baseline Mortality 2005', false);
   map.addLayer(inMask.mean(),{palette: ['#000000','#FFFFFF'],
     min: 0, max: 1, opacity: 0.4},'Design Scenario Mask', false);
+  map.addLayer(smokePM.getBRGmap(PMExposureMap), {palette: '000000,00BFFF', max: 1}, 'BRG Sites');
+  map.add(plotParams.brgLegend());
   map.setControlVisibility({fullscreenControl: false});
-
+  
   // Display Charts:
   var PMts = smokePM.getPM(inputYear,metYear,receptor,inMask);
   var PMts_BAU = smokePM.getPM(inputYear,metYear,receptor,bauMask);

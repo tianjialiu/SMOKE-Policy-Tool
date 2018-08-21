@@ -4,7 +4,7 @@ var IDNprovS = ee.FeatureCollection("projects/IndonesiaPolicyTool/IDN_adm/IDN_ad
     areaLULCtr = ee.ImageCollection("projects/IndonesiaPolicyTool/Cocktail_LULC/areaLULCtr_m2"),
     gcArea = ee.Image("projects/IndonesiaPolicyTool/area_m2/GC_grid"),
     gfedArea = ee.Image("projects/IndonesiaPolicyTool/area_m2/GFEDv4s_grid"),
-    gfedGrid = ee.FeatureCollection("projects/IndonesiaPolicyTool/IDN_adm/IDN_gfedGrid");
+    brgGrid = ee.FeatureCollection("projects/IndonesiaPolicyTool/IDN_conservation/BRG_sites_gfedGrid");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 // ===============================
 // Calculate OC+BC Emissions and
@@ -215,8 +215,22 @@ exports.getPMmap = function(inputYear,metYear,receptor,inMask) {
     .reproject({crs: crsLatLon, crsTransform: gfed_gridRes}));
 };
 
-exports.PMRamp = ['#FFFFFF','#F7F7F7','#D9D9D9','#BDBDBD',
-  '#969696','#636363','#252525','#000000'];
+exports.PMRamp = ['#FFFFFF','#FBC127','#F67D15','#D44842',
+  '#9F2963','#65146E','#280B54','#000000'];
+
+// BRG Sites: Top 5 priority grid cells for reducing emissions
+exports.getBRGmap = function(PMmap) {
+  var PMbrg = PMmap.reduceRegions({
+    collection: brgGrid,
+    reducer: 'max',
+    crs: crsLatLon,
+    crsTransform: gfed_gridRes
+  }).sort('max',false);
+  
+  return ee.Image().byte().rename('BRG_Sites')
+    .paint(ee.FeatureCollection(PMbrg.toList(100,5)), 0, 2)
+    .paint(ee.FeatureCollection(PMbrg.toList(5,0)), 1, 2);
+};
 
 // OC + BC Emissions, Jul-Oct average (μg m-2 s-1)
 exports.getEmissMap = function(inputYear,metYear,receptor,inMask) {
@@ -276,7 +290,7 @@ exports.getPMContrByProvChart = function(PMmap,plotPanel) {
     .setChartType('PieChart')
     .setOptions({
       title: 'Smoke PM2.5 Contribution by Province',
-      legend: 'NAME_1'
+      legend: 'NAME_1',
     });
   plotPanel.add(PMProvChart);
 };
