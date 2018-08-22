@@ -5,7 +5,7 @@ SMOKE Policy Tool in Google Earth Engine
 
 ## Public Apps
 (*Earth Engine Apps, no Google Earth Engine account required*)
-1. [**Smoke Policy Tool UI**](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool): main tool for modeling and projecting the impact of Indonesian fires on public health in Equatorial Asia for 2005-2029 based on land cover/ land use (LULC) classification, Global Fire Emissions Database, version 4s ([GFEDv4s](https://www.globalfiredata.org/)) fire emissions, and meteorology
+1. [**SMOKE Policy Tool UI**](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool): main tool for modeling and projecting the impact of Indonesian fires on public health in Equatorial Asia for 2005-2029 based on land cover/ land use (LULC) classification, Global Fire Emissions Database, version 4s ([GFEDv4s](https://www.globalfiredata.org/)) fire emissions, and meteorology
 <br><br>
 ![banner image](https://github.com/tianjialiu/SMOKE-Policy-Tool/blob/master/docs/imgs/SMOKEPolicyTool_EEApps.jpeg)
 
@@ -23,7 +23,7 @@ SMOKE Policy Tool in Google Earth Engine
 *Select a population-weighted receptor: Indonesia, Singapore, or Malaysia.* A receptor is a location of interest that may be sensitive to pollutants upwind. In this case, the tool estimates and projects the public health impacts in Indonesia, Singapore, or Malaysia based on its respective sensitivity to upwind smoke from fires in Indonesia.
 
 ### Step 4. (Optional) Build a custom scenario by blocking fire emissions in select regions
-In custom scenarios, fire activity can be blocked in a combination of concessions (Oil Palm, Timber, Logging), other regions/ conservation areas (Peatlands, Conservation Areas, and BRG Sites), and Indonesia provinces. Badan Restorasi Gambu (BRG) sites were recently established following the 2015 severe haze event to restore the hydrology of damaged peatlands in Sumatra, Kalimantan, and Papua over a five-year period (https://brg.go.id). Indonesia provinces must be selected by IDs; as an example, to select Aceh and Riau, write in the widget: 0,24. The default option for Indonesian provinces is 'Block all fires', but another option available is 'Target conservation efforts'. In the 'Target conservation efforts' mode, if a concession is selected with a province, fire emissions are only reduced for that concession and province.
+In custom scenarios, fire activity can be blocked in a combination of concessions (Oil Palm, Timber, Logging), other regions/ conservation areas (Peatlands, Conservation Areas, and BRG Sites), and Indonesia provinces. Badan Restorasi Gambu (BRG) sites were recently established following the 2015 severe haze event to restore the hydrology of damaged peatlands in Sumatra, Kalimantan, and Papua over a five-year period (https://brg.go.id). Indonesia provinces must be selected by IDs; as an example, to select Aceh and Riau, write in the widget: 0,24. The default option for Indonesian provinces is 'Block all fires', but another option available is 'Target conservation efforts'. In the 'Target conservation efforts' mode, if a concession is selected with a province, fire emissions are only reduced in areas co-located with that concession within that province.
 
 ### Indonesia Provinces by IDs
 | ID | Sumatera | ID | Kalimantan | ID | Rest of Indonesia |
@@ -74,7 +74,7 @@ In custom scenarios, fire activity can be blocked in a combination of concession
 |   |   |   |   | 33 | Yogyakarta |
 
 ### Public Health Impacts
-After submitting a scenario, please wait a few seconds (~4-7 seconds). Legends will display in the left panel below the 'Submit Scenario' button, and map layers will display in the middle panel. Three charts will be generated and displayed in the right panel: 1. Timeseries of smoke PM<sub>2.5</sub> exposure at the receptor, 2. Pie chart of smoke PM<sub>2.5</sub> contribution by Indonesia province, and 3. Table of attributable mortality for the current and business-as-usual (BAU) scenarios. The tool also calculates the top 5 priority grid cells with BRG sites to reduce emissions; emissions in these grid cells contribute the highest fraction of smoke exposure to the receptor. Map layers can be turned on and off from the 'Layers' dropdown list; currently, if you switch to 'Satellite' view, you must toggle the map layers off and on again to view them.
+After submitting a scenario, please wait a few seconds (~4-7 seconds). Legends will display in the left panel below the 'Submit Scenario' button, and map layers will display in the middle panel. Three charts will be generated and displayed in the right panel: 1. Timeseries of smoke PM<sub>2.5</sub> exposure at the receptor, 2. Pie chart of smoke PM<sub>2.5</sub> contribution by Indonesia province, and 3. Table of attributable mortality for the current and business-as-usual (BAU) scenarios. The tool also calculates the top 5 priority grid cells with BRG sites to reduce emissions; emissions in these grid cells contribute the highest fraction of smoke exposure to the receptor. Map layers can be turned on and off from the 'Layers' dropdown list.
 <br><br>
 
 ## Google Earth Engine Code Editor GUI

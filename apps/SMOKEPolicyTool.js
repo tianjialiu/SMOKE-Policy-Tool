@@ -6,7 +6,7 @@
 
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: August 20, 2018
+// Last updated: August 22, 2018
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
@@ -778,7 +778,7 @@ var csn_csvPanel = function(csn_csvBox, controlPanel) {
   controlPanel.add(ui.Label('Other Regions/Conservation:', {margin: '-1px 0px 4px 8px', stretch: 'horizontal'}));
   controlPanel.add(ui.Panel([
     ui.Panel([csn_csvBox[3]], null, {margin: '-2px -10px -2px 5px', stretch: 'horizontal'}),
-    ui.Panel([csn_csvBox[4]], null, {margin: '-11px -10px -2px 2px', stretch: 'horizontal'}),
+    ui.Panel([csn_csvBox[4]], null, {margin: '-10px -10px -2px 2px', stretch: 'horizontal'}),
     ui.Panel([csn_csvBox[5]], null, {margin: '-2px 0px -2px 18px', stretch: 'horizontal'}),
   ],
   ui.Panel.Layout.Flow('horizontal'), {margin: '2px 0px -4px 0px', stretch: 'horizontal'}));
@@ -1031,13 +1031,13 @@ submitButton.onClick(function() {
   var emissMap = getEmissMap(inputYear,metYear,receptor,inMask);
   
   map.clear(); map.setCenter(108,-1,6);
-  map.addLayer(lulcMapTS1.selfMask(),lulc_pal,'LULC Classification ' + lulcMapTS1.get('timestep').getInfo());
+  map.addLayer(lulcMapTS1.selfMask(),lulc_pal,'LULC Classification ' + lulcMapTS1.get('timestep').getInfo(), true);
   map.addLayer(lulcMapTS2.selfMask(),lulc_pal,'LULC Classification ' + lulcMapTS2.get('timestep').getInfo(), false);
   map.addLayer(stableTrans.selfMask(),lulcTrans_pal,'LULC Stable/Transitions', false);
   map.addLayer(sensitivityMap.updateMask(sensitivityMap.gt(1e4)),
     {palette: sensColRamp, max: 1e5, opacity: 0.4},'GEOS-Chem Adjoint Sensitivity (Jul-Oct)',true);
   map.addLayer(PMExposureMap.multiply(100).selfMask(),
-    {palette: PMRamp, max: 20},'PM2.5 Exposure (Jul-Oct), scaled by 100', false);
+    {palette: PMRamp, max: 20},'PM2.5 Exposure (Jul-Oct), scaled by 100', true);
   map.addLayer(emissMap.selfMask(),
     {palette: emissColRamp, max: 5},'OC+BC Emissions (Jul-Oct)', false);
   map.addLayer(populationDensity.selfMask(),
@@ -1048,7 +1048,6 @@ submitButton.onClick(function() {
     min: 0, max: 1, opacity: 0.4},'Design Scenario Mask', false);
   map.addLayer(getBRGmap(PMExposureMap), {palette: '000000,00BFFF', max: 1}, 'BRG Sites');
   map.add(brgLegend());
-  map.setControlVisibility({fullscreenControl: false});
 
   // Display Charts:
   var PMts = getPM(inputYear,metYear,receptor,inMask);

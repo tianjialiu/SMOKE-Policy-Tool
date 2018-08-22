@@ -73,7 +73,7 @@ exports.csn_csvPanel = function(csn_csvBox, controlPanel) {
   controlPanel.add(ui.Label('Other Regions/Conservation:', {margin: '-1px 0px 4px 8px', stretch: 'horizontal'}));
   controlPanel.add(ui.Panel([
     ui.Panel([csn_csvBox[3]], null, {margin: '-2px -10px -2px 5px', stretch: 'horizontal'}),
-    ui.Panel([csn_csvBox[4]], null, {margin: '-11px -10px -2px 2px', stretch: 'horizontal'}),
+    ui.Panel([csn_csvBox[4]], null, {margin: '-10px -10px -2px 2px', stretch: 'horizontal'}),
     ui.Panel([csn_csvBox[5]], null, {margin: '-2px 0px -2px 18px', stretch: 'horizontal'}),
   ],
   ui.Panel.Layout.Flow('horizontal'), {margin: '2px 0px -4px 0px', stretch: 'horizontal'}));

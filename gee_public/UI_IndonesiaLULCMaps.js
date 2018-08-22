@@ -6,7 +6,7 @@
 // *****************************************************************
 
 // Author: Tianjia Liu
-// Last updated: August 19, 2018
+// Last updated: August 22, 2018
 
 // UI LULC Maps adapted and modified from code by Gennadii Donchyts
 // (https://code.earthengine.google.com/f0011ae8554cf924176fd7a931a38add)
@@ -51,7 +51,7 @@ var conservation_ramp = ['#800080','#000000'];
 var maps = [];
 panelNames.forEach(function(name, index) {
   var map = ui.Map();
-  map.setControlVisibility({layerList: false, fullscreenControl: false, mapTypeControl: false});
+  map.setControlVisibility({layerList: false, fullscreenControl: false});
   
   if (index === 0) {
     map.addLayer(lulcMapTS1.selfMask(),smokeLULC.lulc_pal,'LULC, 2005');

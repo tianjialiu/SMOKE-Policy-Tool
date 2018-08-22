@@ -6,7 +6,7 @@
 /*
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: August 20, 2018
+// Last updated: August 22, 2018
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
@@ -168,7 +168,7 @@ submitButton.onClick(function() {
   map.addLayer(sensitivityMap.updateMask(sensitivityMap.gt(1e4)),
     {palette: smokePM.sensColRamp, max: 1e5, opacity: 0.4},'GEOS-Chem Adjoint Sensitivity (Jul-Oct)',true);
   map.addLayer(PMExposureMap.multiply(100).selfMask(),
-    {palette: smokePM.PMRamp, max: 20},'PM2.5 Exposure (Jul-Oct), scaled by 100', false);
+    {palette: smokePM.PMRamp, max: 20},'PM2.5 Exposure (Jul-Oct), scaled by 100', true);
   map.addLayer(emissMap.selfMask(),
     {palette: smokePM.emissColRamp, max: 5},'OC+BC Emissions (Jul-Oct)', false);
   map.addLayer(smokeHealth.populationDensity.selfMask(),
@@ -179,7 +179,6 @@ submitButton.onClick(function() {
     min: 0, max: 1, opacity: 0.4},'Design Scenario Mask', false);
   map.addLayer(smokePM.getBRGmap(PMExposureMap), {palette: '000000,00BFFF', max: 1}, 'BRG Sites');
   map.add(plotParams.brgLegend());
-  map.setControlVisibility({fullscreenControl: false});
   
   // Display Charts:
   var PMts = smokePM.getPM(inputYear,metYear,receptor,inMask);
