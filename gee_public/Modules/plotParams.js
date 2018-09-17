@@ -29,7 +29,7 @@ exports.yearPanel = function() {
   
   return ui.Panel([
       policyToolLabel, githubRepoLabel, inputYearSectionLabel,
-      ui.Panel([inputYearLabel, inputYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}), //
+      ui.Panel([inputYearLabel, inputYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}),
       ui.Panel([metYearLabel, metYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}),
       metYearDescription, metYearRanking
     ]);

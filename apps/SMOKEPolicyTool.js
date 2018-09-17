@@ -6,11 +6,11 @@
 
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: August 22, 2018
+// Last updated: September 17, 2018
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
-// land cover/ land use (LULC) classification, GFEDv4s fire emissions,
+// land use/ land cover (LULC) classification, GFEDv4s fire emissions,
 // and meteorology
 
 // -----------
@@ -734,7 +734,7 @@ var yearPanel = function() {
     
   return ui.Panel([
       policyToolLabel, githubRepoLabel, inputYearSectionLabel,
-      ui.Panel([inputYearLabel, inputYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}), //
+      ui.Panel([inputYearLabel, inputYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}),
       ui.Panel([metYearLabel, metYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}),
       metYearDescription, metYearRanking
     ]);

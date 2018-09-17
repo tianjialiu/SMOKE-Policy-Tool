@@ -6,11 +6,11 @@
 /*
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: August 22, 2018
+// Last updated: September 17, 2018
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
-// land cover/ land use (LULC) classification, GFEDv4s fire emissions,
+// land use/ land cover (LULC) classification, GFEDv4s fire emissions,
 // and meteorology
 
 // To start: click 'Run' above the code editor to initialize the
@@ -59,17 +59,6 @@
 
 // 3. Kim, P.S. et al. (2015). Sensitivity of population smoke exposure to fire
 // locations in Equatorial Asia. Atmos. Environ. 102, 11-17. https://doi.org/10.1016/j.atmosenv.2014.09.045
-
-// ------------------------
-//  - Contact/Questions - |
-// ------------------------
-// Help with SMOKE policy tool, technical questions & report bugs:
-// Tianjia Liu (tianjialiu@g.harvard.edu)
-
-// General science questions:
-// Miriam Marlier (mmarlier@rand.org)
-// Ruth DeFries (rd2402@columbia.edu)
-// Loretta Mickley (mickley@fas.harvard.edu)
 */
 // =================================================================
 // *****************   --    User Interface    --   ****************
