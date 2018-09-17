@@ -1,11 +1,13 @@
 # SMOKE-Policy-Tool
 SMOKE Policy Tool in Google Earth Engine
 
+The [SMOKE Policy Tool](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool) estimates and projects the public health impacts in Equatorial Asia due to Indonesian fires and allows users to customize scenarios in which fire activity is reduced based on possible conservation efforts.
+
 - *Note*: The SMOKE Policy Tool can be accessed from 1) Earth Engine Apps and 2) a read-only public repository in the Google Earth Engine (GEE) code editor. Earth Engine Apps is currently an experimental product and does not support special characters and EE 'require' functions. Accessing the UI from the 'users/smokepolicytool/public' repository in the GEE code editor is more stable and interactive but requires a (free) GEE account.
 
 ## Public Apps
 (*Earth Engine Apps, no Google Earth Engine account required*)
-1. [**SMOKE Policy Tool UI**](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool): main tool for modeling and projecting the impact of Indonesian fires on public health in Equatorial Asia for 2005-2029 based on land cover/ land use (LULC) classification, Global Fire Emissions Database, version 4s ([GFEDv4s](https://www.globalfiredata.org/)) fire emissions, and meteorology
+1. [**SMOKE Policy Tool UI**](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool): main tool for modeling and projecting the impact of Indonesian fires on public health in Equatorial Asia for 2005-2029 based on land use/ land cover (LULC) classification, Global Fire Emissions Database, version 4s ([GFEDv4s](https://www.globalfiredata.org/)) fire emissions, and meteorology
 <br><br>
 ![banner image](https://github.com/tianjialiu/SMOKE-Policy-Tool/blob/master/docs/imgs/SMOKEPolicyTool_EEApps.jpeg)
 
@@ -100,3 +102,5 @@ Click the 'UI_SMOKEPolicyTool.js' script in the 'users/smokepolicytool/public' r
 2. Koplitz, S.N., L.J. Mickley, M.E. Marlier, J.J. Buonocore, P.S. Kim, T. Liu, M.P. Sulprizio, R.S. DeFries, D.J. Jacob, J. Schwartz, and S.S. Myers (2016). Public health impacts of the severe haze in Equatorial Asia in September–October 2015: demonstration of a new framework for informing fire management strategies to reduce downwind smoke exposure. *Environ. Res. Lett.* 11(9), 094023. https://doi.org/10.1088/1748-9326/11/9/094023
 
 3. Kim, P.S., D.J. Jacob, L.J. Mickley, S.N. Koplitz, M.E. Marlier, R.S. DeFries, S.S. Myers, B.N. Chew, and Y.H. Mao (2015). Sensitivity of population smoke exposure to fire locations in Equatorial Asia. *Atmos. Environ.* 102, 11-17. https://doi.org/10.1016/j.atmosenv.2014.09.045
+
+4. van der Werf, G.R., J.T. Randerson, L. Giglio, T.T. van Leeuwen, Y. Chen, B.M. Rogers, M. Mu, M.J.E. van Marle, D.C. Morton, G.J. Collatz, R.J. Yokelson, and P.S. Kasibhatla (2017). Global fire emissions estimates during 1997-2016. *Earth Syst. Sci. Data* 9, 697–720. https://doi.org/10.5194/essd-9-697-2017
