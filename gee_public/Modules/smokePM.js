@@ -1,18 +1,18 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var IDNprovS = ee.FeatureCollection("projects/IndonesiaPolicyTool/IDN_adm/IDN_adm1_simplified"),
-    emiRateLULCtr = ee.ImageCollection("projects/IndonesiaPolicyTool/Cocktail_LULC/emiRateLULCtr_kg_per_m2"),
-    areaLULCtr = ee.ImageCollection("projects/IndonesiaPolicyTool/Cocktail_LULC/areaLULCtr_m2"),
-    gcArea = ee.Image("projects/IndonesiaPolicyTool/area_m2/GC_grid"),
-    gfedArea = ee.Image("projects/IndonesiaPolicyTool/area_m2/GFEDv4s_grid"),
-    brgGrid = ee.FeatureCollection("projects/IndonesiaPolicyTool/IDN_conservation/BRG_sites_gfedGrid");
+var IDNprovS = ee.FeatureCollection("users/smokepolicytool/IDN_adm/IDN_adm1_simplified"),
+    emiRateLULCtr = ee.ImageCollection("users/smokepolicytool/Cocktail_LULC/emiRateLULCtr_kg_per_m2"),
+    areaLULCtr = ee.ImageCollection("users/smokepolicytool/Cocktail_LULC/areaLULCtr_m2"),
+    gcArea = ee.Image("users/smokepolicytool/area_m2/GC_grid"),
+    gfedArea = ee.Image("users/smokepolicytool/area_m2/GFEDv4s_grid"),
+    brgGrid = ee.FeatureCollection("users/smokepolicytool/IDN_conservation/BRG_sites_gfedGrid");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 // ===============================
 // Calculate OC+BC Emissions and
 // Monthly Smoke PM2.5
 // ===============================
 var outputRegion = ee.Geometry.Rectangle([95,-11,141,6],'EPSG:4326',false);
-var adjointFolder = 'projects/IndonesiaPolicyTool/GC_adjoint_sensitivities/';
-var adjointFolder_ds = 'projects/IndonesiaPolicyTool/GC_adjoint_sensitivities_0p25deg/';
+var adjointFolder = 'users/smokepolicytool/GC_adjoint_sensitivities/';
+var adjointFolder_ds = 'users/smokepolicytool/GC_adjoint_sensitivities_0p25deg/';
 
 var crsLatLon = 'EPSG:4326';
 var ds_gridRes = [0.008333333333333333,0,95,0,-0.008333333333333333,6];

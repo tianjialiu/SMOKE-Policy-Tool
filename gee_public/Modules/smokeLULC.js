@@ -1,11 +1,11 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var dsGrid = ee.Image("projects/IndonesiaPolicyTool/IDN_adm/dsGFEDgrid"),
-    marHanS2005 = ee.Image("projects/IndonesiaPolicyTool/marHanS_LULC/marHanS2005"),
-    marHanS2010 = ee.Image("projects/IndonesiaPolicyTool/marHanS_LULC/marHanS2010"),
-    marHanSfuture = ee.ImageCollection("projects/IndonesiaPolicyTool/marHanS_LULC/marHanS_future"),
-    peatMask = ee.Image("projects/IndonesiaPolicyTool/IDN_masks/IDN_peat"),
-    IDN_adm1_masks = ee.Image("projects/IndonesiaPolicyTool/IDN_masks_0p25deg/IDN_adm1"),
-    IDN_masks = ee.ImageCollection("projects/IndonesiaPolicyTool/Cocktail_LULC/blockingFires_masks");
+var dsGrid = ee.Image("users/smokepolicytool/IDN_adm/dsGFEDgrid"),
+    marHanS2005 = ee.Image("users/smokepolicytool/marHanS_LULC/marHanS2005"),
+    marHanS2010 = ee.Image("users/smokepolicytool/marHanS_LULC/marHanS2010"),
+    marHanSfuture = ee.ImageCollection("users/smokepolicytool/marHanS_LULC/marHanS_future"),
+    peatMask = ee.Image("users/smokepolicytool/IDN_masks/IDN_peat"),
+    IDN_adm1_masks = ee.Image("users/smokepolicytool/IDN_masks_0p25deg/IDN_adm1"),
+    IDN_masks = ee.ImageCollection("users/smokepolicytool/Cocktail_LULC/blockingFires_masks");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 // ===============================
 // Margono + Hansen LULC maps and

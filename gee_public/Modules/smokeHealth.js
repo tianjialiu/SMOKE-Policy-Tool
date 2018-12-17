@@ -1,5 +1,5 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var gpw2005 = ee.Image("projects/IndonesiaPolicyTool/IDN_adm/GPW2005");
+var gpw2005 = ee.Image("users/smokepolicytool/IDN_adm/GPW2005");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 // ==========================
 // Calculate Health Impacts
