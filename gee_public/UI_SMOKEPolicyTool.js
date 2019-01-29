@@ -6,7 +6,7 @@
 /*
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: September 17, 2018
+// Last updated: January 29, 2019
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
@@ -77,7 +77,7 @@ var smokeHealth = require('users/smokepolicytool/public:Modules/smokeHealth.js')
 // Control panel
 var controlPanel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
-  style: {width: '335px'}
+  style: {width: '340px'}
 });
 
 // Plot panel

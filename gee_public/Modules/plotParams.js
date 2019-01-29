@@ -179,7 +179,8 @@ var continuousLegend = function(controlPanel, title, colPal, minVal,
 };
 
 exports.legendPanel = function(controlPanel) {
-  controlPanel.add(ui.Label('----------------------------------------------------------------------------------', {margin: '-10px 8px 12px 8px', stretch: 'horizontal'}));
+  controlPanel.add(ui.Label('----------------------------------------------------------------------------------',
+    {margin: '-10px 8px 12px 8px', stretch: 'horizontal', textAlign: 'center'}));
   controlPanel.add(ui.Label('Legends', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 8px 8px'}));
 
   discreteLegend(controlPanel,'Land Use/ Land Cover',

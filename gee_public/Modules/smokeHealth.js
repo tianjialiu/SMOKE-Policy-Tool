@@ -31,10 +31,10 @@ var getAttributableMortalityAdult = function(receptor, exposure) {
   
   var age = 'adult';
   var concentrationResponse = function(dExposure) {
-    var FullLin25CI = function(x) {return ((0.0059 * 1.8) - (1.96 * 0.004)) * x};
-    var FullLin = function(x) {return (0.0059 * 1.8) * x};
-    var FullLin975CI = function(x) {return ((0.0059 * 1.8) + (1.96 * 0.004)) * x};
-
+    var FullLin25CI = function(x) {return 0.0097 * x};
+    var FullLin = function(x) {return 0.0103 * x};
+    var FullLin975CI = function(x) {return 0.0111 * x};
+    
     var LinTo50 = function(x) {
       if (x > breakPt) {return FullLin(breakPt)} else {return FullLin(x)}
     };
@@ -80,6 +80,7 @@ var getAttributableMortalityChild = function(receptor, exposure, age) {
     var FullLin25CI = function(x) {return 0.003 * x};
     var FullLin = function(x) {return 0.012 * x};
     var FullLin975CI = function(x) {return 0.03 * x};
+    
     var FullLog = function(x) {return 1 - (1/Math.exp(0.012 * x))};
     var FullLog25CI = function(x) {return 1 - (1/Math.exp(0.003 * x))};
     var FullLog975CI = function(x) {return 1 - (1/Math.exp(0.03 * x))};

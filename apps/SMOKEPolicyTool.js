@@ -6,7 +6,7 @@
 
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: September 17, 2018
+// Last updated: January 29, 2019
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
@@ -559,9 +559,9 @@ var getAttributableMortalityAdult = function(receptor, exposure) {
   
   var age = 'adult';
   var concentrationResponse = function(dExposure) {
-    var FullLin25CI = function(x) {return ((0.0059 * 1.8) - (1.96 * 0.004)) * x};
-    var FullLin = function(x) {return (0.0059 * 1.8) * x};
-    var FullLin975CI = function(x) {return ((0.0059 * 1.8) + (1.96 * 0.004)) * x};
+    var FullLin25CI = function(x) {return 0.0097 * x};
+    var FullLin = function(x) {return 0.0103 * x};
+    var FullLin975CI = function(x) {return 0.0111 * x};
 
     var LinTo50 = function(x) {
       if (x > breakPt) {return FullLin(breakPt)} else {return FullLin(x)}
@@ -608,6 +608,7 @@ var getAttributableMortalityChild = function(receptor, exposure, age) {
     var FullLin25CI = function(x) {return 0.003 * x};
     var FullLin = function(x) {return 0.012 * x};
     var FullLin975CI = function(x) {return 0.03 * x};
+    
     var FullLog = function(x) {return 1 - (1/Math.exp(0.012 * x))};
     var FullLog25CI = function(x) {return 1 - (1/Math.exp(0.003 * x))};
     var FullLog975CI = function(x) {return 1 - (1/Math.exp(0.03 * x))};
@@ -884,7 +885,8 @@ var continuousLegend = function(controlPanel, title, colPal, minVal,
 };
 
 var legendPanel = function(controlPanel) {
-  controlPanel.add(ui.Label('----------------------------------------------------------------------------------', {margin: '-10px 8px 12px 8px', stretch: 'horizontal'}));
+  controlPanel.add(ui.Label('----------------------------------------------------------------------------------',
+    {margin: '-10px 8px 12px 8px', stretch: 'horizontal', textAlign: 'center'}));
   controlPanel.add(ui.Label('Legends', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 8px 8px'}));
 
   discreteLegend(controlPanel,'Land Use/ Land Cover',
@@ -961,7 +963,7 @@ var plotPanelLabel = ui.Label('Public Health Impacts', {fontWeight: 'bold', font
 // Control panel
 var controlPanel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
-  style: {width: '335px'}
+  style: {width: '350px'}
 });
 
 // Plot panel
