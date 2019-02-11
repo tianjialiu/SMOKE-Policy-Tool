@@ -11,7 +11,7 @@ var smokeHealth = require('users/smokepolicytool/public:Modules/smokeHealth.js')
 // ------------
 exports.yearPanel = function() {
   var policyToolLabel = ui.Label('SMOKE Policy Tool', {margin: '12px 0px 0px 8px', fontWeight: 'bold', fontSize: '24px', border: '1px solid black', padding: '3px 3px 3px 3px'});
-  var githubRepoLabel = ui.Label('Documentation: github.com/tianjialiu/SMOKE-Policy-Tool', {margin: '8px 8px 5px 8px', fontSize: '12.5px'});
+  var githubRepoLabel = ui.Label('Documentation: github.com/tianjialiu/SMOKE-Policy-Tool', {margin: '8px 8px 5px 8px', fontSize: '12.5px'}, 'https://github.com/tianjialiu/SMOKE-Policy-Tool');
   var inputYearSectionLabel = ui.Label('Design Scenario', {margin: '8px 8px 5px 8px', fontWeight: 'bold', fontSize: '20px'});
   
   var inputYearLabel = ui.Label('1) Scenario Year:', {fontSize: '14.5px'});
