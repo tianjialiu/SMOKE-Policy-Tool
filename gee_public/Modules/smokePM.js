@@ -48,7 +48,7 @@ var bc_ef_LULCtr = bc_ef_LULCtr.rename(LULCtr);
 
 // Conversion factors
 var sf_timeSteps = 24 * 3; // number of physical time steps in adjoint (20 min time steps),
-var sf_smokePMtracer = 24; // molecular mass of OC + BC adjoint tracer, conversion to smoke PM2.5
+var sf_smokePMtracer = 24; // molecular weight of hydrophilic and hydrophilic OC, BC adjoint tracer, conversion to smoke PM2.5
 var sf_timeDay = 24 * 60 * 60; // seconds per day
 
 // Receptors (population-weighted)
