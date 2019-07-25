@@ -264,7 +264,7 @@ exports.getPMchart = function(PMts,PMavg,OCtot,BCtot,plotPanel) {
       title: 'Population-Weighted Smoke PM2.5 Exposure',
       hAxis: {'format':'MMM'},
       vAxis: {title: 'Smoke PM2.5 (μg/m³)'},
-      legend: 'none',
+      legend: {position: 'none'},
       lineWidth: 2,
       pointSize: 5,
     });

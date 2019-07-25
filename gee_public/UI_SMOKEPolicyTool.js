@@ -6,12 +6,16 @@
 /*
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: February 11, 2019
+// Last updated: July 24, 2019
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
 // land use/ land cover (LULC) classification, GFEDv4s fire emissions,
 // and meteorology
+
+// Citation: Marlier et al. (2019) Fires, Smoke Exposure, and Public Health:
+// An Integrative Framework to Maximize Health Benefits from Peatland Restoration.
+// Geohealth, 3. https://doi.org/10.1029/2019GH000191
 
 // To start: click 'Run' above the code editor to initialize the
 // user interface
@@ -77,7 +81,7 @@ var smokeHealth = require('users/smokepolicytool/public:Modules/smokeHealth.js')
 // Control panel
 var controlPanel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
-  style: {width: '340px'}
+  style: {width: '350px'}
 });
 
 // Plot panel
