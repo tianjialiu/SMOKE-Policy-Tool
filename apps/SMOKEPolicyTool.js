@@ -723,7 +723,7 @@ var yearPanel = function() {
   var policyToolLabel = ui.Label('SMOKE Policy Tool', {margin: '12px 0px 0px 8px', fontWeight: 'bold', fontSize: '24px', border: '1px solid black', padding: '3px 3px 3px 3px'});
   
   var paperLabel = ui.Label('Citation: Marlier et al. (2019, GeoHealth)', {margin: '5px 0px 5px 8px', fontSize: '12.5px'}, 'https://doi.org/10.1029/2019GH000191');
-  var githubRepoLabel = ui.Label('[GitHub: Code/Info]', {margin: '5px 0px 5px 5px', fontSize: '12.5px'}, 'github.com/tianjialiu/SMOKE-Policy-Tool');
+  var githubRepoLabel = ui.Label('[GitHub: Code/Info]', {margin: '5px 0px 5px 5px', fontSize: '12.5px'}, 'https://github.com/tianjialiu/SMOKE-Policy-Tool');
 
   var inputYearSectionLabel = ui.Label('Design Scenario', {margin: '8px 8px 5px 8px', fontWeight: 'bold', fontSize: '20px'});
   var inputYearLabel = ui.Label('1) Scenario Year:', {fontSize: '14.5px'});
