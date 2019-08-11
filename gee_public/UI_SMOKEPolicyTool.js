@@ -6,7 +6,7 @@
 /*
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: July 24, 2019
+// Last updated: August 11, 2019
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
@@ -15,7 +15,7 @@
 
 // Citation: Marlier et al. (2019) Fires, Smoke Exposure, and Public Health:
 // An Integrative Framework to Maximize Health Benefits from Peatland Restoration.
-// Geohealth, 3. https://doi.org/10.1029/2019GH000191
+// Geohealth, 3, 178-189. https://doi.org/10.1029/2019GH000191
 
 // To start: click 'Run' above the code editor to initialize the
 // user interface
