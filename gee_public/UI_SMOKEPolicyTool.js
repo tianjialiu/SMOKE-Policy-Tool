@@ -6,7 +6,7 @@
 /*
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: August 11, 2019
+// Last updated: September 20, 2019
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
@@ -34,8 +34,9 @@
 // * 'UI LULC Maps' can be used to visualize the locations of
 // land use/ land cover, concessions, and conservation areas *
 
-// 7. Indonesian Provinces (see console for list of ID codes with
-// province names after UI loads)
+// 7. Indonesian Provinces
+// please see the table here for IDs matched to province names:
+// https://sites.google.com/view/smokepolicytool/apps/step-by-step
 
 // ||Step 5|| Submit Scenario: the script will freeze for ~4-7 seconds
 // as Google Earth Engine makes the necessary computations:
@@ -53,8 +54,9 @@
 // ------------------
 // - Publications - |
 // ------------------
-// 1. Marlier, M.E. et al. (in prep). Fires, Smoke Exposure, and Public Health:
-// An Integrative Framework to Maximize Health Benefits from Peatland Restoration
+// 1. Marlier, M.E. et al. (2019). Fires, Smoke Exposure, and Public Health:
+// An Integrative Framework to Maximize Health Benefits from Peatland Restoration.
+// GeoHealth. 3, 178-189. https://doi.org/10.1029/2019GH000191
 
 // 2. Koplitz, S.N. et al. (2016). Public health impacts of the severe haze in
 // Equatorial Asia in September–October 2015: demonstration of a new framework for
@@ -62,7 +64,8 @@
 // Environ. Res. Lett. 11(9), 094023. https://doi.org/10.1088/1748-9326/11/9/094023
 
 // 3. Kim, P.S. et al. (2015). Sensitivity of population smoke exposure to fire
-// locations in Equatorial Asia. Atmos. Environ. 102, 11-17. https://doi.org/10.1016/j.atmosenv.2014.09.045
+// locations in Equatorial Asia.
+// Atmos. Environ. 102, 11-17. https://doi.org/10.1016/j.atmosenv.2014.09.045
 */
 // =================================================================
 // *****************   --    User Interface    --   ****************
@@ -81,17 +84,18 @@ var smokeHealth = require('users/smokepolicytool/public:Modules/smokeHealth.js')
 // Control panel
 var controlPanel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
-  style: {width: '350px'}
+  style: {width: '350px', maxWidth: '350px'}
 });
 
 // Plot panel
 var plotPanel = ui.Panel(null, null, {stretch: 'horizontal'});
-var plotPanelParent = ui.Panel([plotParams.plotPanelLabel, plotPanel], null, {width: '400px'});
-
+var plotPanelParent = ui.Panel([plotParams.plotPanelLabel, plotPanel], null,
+  {width: '400px', maxWidth: '400px'});
+  
 // Map panel
 var map = ui.Map();
 map.style().set({cursor:'crosshair'});
-map.setCenter(110,-2,5);
+map.setCenter(112,-2,5);
 map.setControlVisibility({fullscreenControl: false});
 
 var csn_csvList = [['Oil Palm','OP'], ['Timber','TM'], ['Logging','LG'],
@@ -112,10 +116,6 @@ var provPanel = plotParams.provPanel(provBox);
 var provOptionsPanel = plotParams.provOptionsPanel();
 var clickCounter = 0;
 
-if (clickCounter === 0) {
-  print('Indonesian Provinces'); print(smokeLULC.IDN_adm1_masks_names);
-}
-
 // Display Panels
 controlPanel.add(yearPanel);
 controlPanel.add(receptorSelectPanel);
@@ -124,13 +124,27 @@ controlPanel.add(provOptionsPanel);
 controlPanel.add(provPanel);
 controlPanel.add(submitButton);
 controlPanel.add(plotParams.waitMessage);
-ui.root.clear(); ui.root.add(controlPanel);
-ui.root.add(map); ui.root.add(plotPanelParent);
+
+ui.root.clear();
+  
+var init_panels = ui.SplitPanel({firstPanel: controlPanel,
+  secondPanel: map});
+  
+var ui_panels = ui.SplitPanel({
+  firstPanel: ui.Panel([init_panels]),
+  secondPanel: plotPanelParent
+});
+
+ui.root.add(init_panels);
 
 // Run calculations, linked to submit button
 submitButton.onClick(function() {
   clickCounter = clickCounter + 1;
-  if (clickCounter == 1) {plotParams.legendPanel(controlPanel)}
+  if (clickCounter == 1) {
+    ui.root.remove(init_panels);
+    ui.root.add(ui_panels);
+    plotParams.legendPanel(controlPanel);
+  }
   
   // Scenario Parameters:
   var inputYear = plotParams.getYears(yearPanel).inputYear;

@@ -11,9 +11,12 @@ var smokeHealth = require('users/smokepolicytool/public:Modules/smokeHealth.js')
 // ------------
 exports.yearPanel = function() {
   var policyToolLabel = ui.Label('SMOKE Policy Tool', {margin: '12px 0px 0px 8px', fontWeight: 'bold', fontSize: '24px', border: '1px solid black', padding: '3px 3px 3px 3px'});
-
+  
+  var infoLabel = ui.Label('The SMOKE Policy Tool models and projects the impact of Indonesian fires on public health in Equatorial Asia for 2005-2029 based on land use/ land cover classification, GFEDv4s fire emissions, and meteorology.',
+    {margin: '8px 20px 2px 8px', fontSize: '12px', color: '#777'});
+  var websiteLabel = ui.Label('[Website]', {margin: '0px 0px 5px 8px', fontSize: '12.5px'}, 'https://sites.google.com/view/smokepolicytool/home');
   var paperLabel = ui.Label('Citation: Marlier et al. (2019, GeoHealth)', {margin: '5px 0px 5px 8px', fontSize: '12.5px'}, 'https://doi.org/10.1029/2019GH000191');
-  var githubRepoLabel = ui.Label('[GitHub: Code/Info]', {margin: '5px 0px 5px 5px', fontSize: '12.5px'}, 'https://github.com/tianjialiu/SMOKE-Policy-Tool');
+  var githubRepoLabel = ui.Label('GitHub: Code/Info', {margin: '0px 0px 5px 8px', fontSize: '12.5px'}, 'https://github.com/tianjialiu/SMOKE-Policy-Tool');
 
   var inputYearSectionLabel = ui.Label('Design Scenario', {margin: '8px 8px 5px 8px', fontWeight: 'bold', fontSize: '20px'});
   var inputYearLabel = ui.Label('1) Scenario Year:', {fontSize: '14.5px'});
@@ -28,9 +31,11 @@ exports.yearPanel = function() {
     {margin: '1px 0px 0px 25px', color: '#888', fontSize: '13.8px', fontWeight:'410'});
   var metYearRanking = ui.Label('2005: [6.5], 2006: [1.5], 2007: [6], 2008: [9], 2009: [3]',
     {margin: '3px 0px 8px 12px', color: '#999', fontSize: '13.5px'});
-  
+    
   return ui.Panel([
-      policyToolLabel, ui.Panel([paperLabel, githubRepoLabel], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}),
+      policyToolLabel, ui.Panel([ui.Panel([infoLabel, websiteLabel],ui.Panel.Layout.Flow('vertical')),
+        paperLabel, githubRepoLabel],
+        ui.Panel.Layout.Flow('vertical'), {stretch: 'horizontal'}),
       inputYearSectionLabel, ui.Panel([inputYearLabel, inputYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}),
       ui.Panel([metYearLabel, metYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}),
       metYearDescription, metYearRanking

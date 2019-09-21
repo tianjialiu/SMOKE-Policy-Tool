@@ -1,7 +1,7 @@
 # SMOKE-Policy-Tool
 SMOKE Policy Tool in Google Earth Engine
 
-The [SMOKE Policy Tool](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool) estimates and projects the public health impacts in Equatorial Asia due to Indonesian fires and allows users to customize scenarios in which fire activity is reduced based on possible conservation efforts.
+The [SMOKE Policy Tool](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool) estimates and projects the public health impacts in Equatorial Asia due to Indonesian fires and allows users to customize scenarios in which fire activity is reduced based on possible conservation efforts. Please see our [website](https://sites.google.com/view/smokepolicytool/home) for more information.
 
 - *Note*: The SMOKE Policy Tool can be accessed from 1) Earth Engine Apps and 2) a read-only public repository in the Google Earth Engine (GEE) code editor. Earth Engine Apps is currently an experimental product (now released to the GEE community!) and does not support special characters and EE 'require' functions. Accessing the UI from the 'users/smokepolicytool/public' repository in the GEE code editor is more stable and interactive but requires a (free) GEE account.
 
