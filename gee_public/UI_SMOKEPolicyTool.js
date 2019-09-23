@@ -6,7 +6,7 @@
 /*
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // Author: Tianjia Liu
-// Last updated: September 20, 2019
+// Last updated: September 22, 2019
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
@@ -106,7 +106,7 @@ csn_csvList.forEach(function(name, index) {
   csn_csvBox.push(checkBox);
 });
 
-var provBox = ui.Textbox("See console, valid IDs 0-33: e.g., 1,3");
+var provBox = ui.Textbox("<- see table at link; valid IDs 0-33: e.g., 1,3");
 provBox.style().set('stretch', 'horizontal');
 
 var submitButton = plotParams.submitButton();

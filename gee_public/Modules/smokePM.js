@@ -51,14 +51,15 @@ var sf_timeSteps = 24 * 3; // number of physical time steps in adjoint (20 min t
 var sf_smokePMtracer = 24; // molecular weight of hydrophilic and hydrophilic OC, BC adjoint tracer, conversion to smoke PM2.5
 var sf_timeDay = 24 * 60 * 60; // seconds per day
 
-// Receptors (population-weighted)
-var receptorList = ['Singapore','Indonesia','Malaysia'];
-var receptorCodeList = ['SGP','IDN','MYS'];
+// Find 3-letter code to using full name of receptor
+var receptorList = {
+  'Singapore': 'SGP',
+  'Indonesia': 'IDN',
+  'Malaysia': 'MYS'
+};
 
-// Index 3-letter code to find full name of receptor
 var getReceptorCode = function(receptor) {
-  var receptorIdx = receptorList.indexOf(receptor);
-  return receptorCodeList[receptorIdx];
+  return receptorList[receptor];
 };
 
 // Retrieve adjoint sensitivities for input receptor
@@ -73,7 +74,7 @@ var imageToFeature = function(inImage,inRegion) {
       reducer: ee.Reducer.sum().unweighted(),
       crs: crsLatLon,
       crsTransform: gfed_gridRes
-    }).toList(1,0).get(0);
+    }).first();
   return ee.Feature(inImageCol);
 };
 

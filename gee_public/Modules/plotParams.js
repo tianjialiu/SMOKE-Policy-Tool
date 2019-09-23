@@ -96,7 +96,8 @@ exports.getChecked = function(box, list) {
 };
 
 exports.provPanel = function(provBox) {
-  var provLabel = ui.Label('By IDs: ', {margin: '8px 6px 8px 8px', stretch: 'vertical'});
+  var provLabel = ui.Label('By IDs: ', {margin: '8px 6px 8px 8px', stretch: 'vertical'},
+    'https://sites.google.com/view/smokepolicytool/apps/step-by-step#h.p_j-FbQd21XtjU');
   return ui.Panel([provLabel,provBox], ui.Panel.Layout.Flow('horizontal'), {margin: '-5px 8px 0px 8px', stretch: 'horizontal'});
 };
 

@@ -168,12 +168,18 @@ exports.getMortalityChart = function(PMts, PMts_BAU, receptor, plotPanel) {
   var mortalityCI_BAU = calcAllMortality(PMts_BAU, receptor, 'BAU');
   var mortalityCI_all = ee.FeatureCollection([mortalityCI, mortalityCI_BAU]);
   
-  plotPanel.add(ui.Label('Attributable Mortality (Deaths)',
+  plotPanel.add(ui.Label('Attributable Mortality (Excess Deaths)',
     {margin: '-10px 0px -5px 25px', padding: '0px 0px 8px 0px', stretch: 'horizontal', fontSize: '15px', fontWeight: 'bold'}));
   
-   var mortalityChart = ui.Chart.feature.byFeature(mortalityCI_all,'Scenario',['Age 0-1','Age 1-4','Age 25+'])
-    .setChartType('Table');
-  plotPanel.add(mortalityChart);
+  var mortalityChart = ui.Chart.feature.byFeature(mortalityCI_all,'Scenario',['Age 0-1','Age 1-4','Age 25+'])
+      .setChartType('Table');
+      
+  var mortalityChartPanel = ui.Panel({
+    widgets: [mortalityChart],
+    style: {padding: '0 0 0 16px'}
+  });
+  
+  plotPanel.add(mortalityChartPanel);
   
   plotPanel.add(ui.Label('Adults All-Cause: ' + mortalityCI.get('Age 25+').getInfo(),
     {margin: '-10px 0px -5px 25px', padding: '10px 0px 8px 0px', stretch: 'horizontal'}));

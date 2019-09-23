@@ -76,7 +76,7 @@ In custom scenarios, fire activity can be blocked in a combination of concession
 |   |   |   |   | 33 | Yogyakarta |
 
 ### Public Health Impacts
-After submitting a scenario, please wait a few seconds (~4-7 seconds). Legends will display in the left panel below the 'Submit Scenario' button, and map layers will display in the middle panel. Three charts will be generated and displayed in the right panel: 1. Timeseries of smoke PM<sub>2.5</sub> exposure at the receptor, 2. Pie chart of smoke PM<sub>2.5</sub> contribution by Indonesia province, and 3. Table of attributable mortality for the current and business-as-usual (BAU) scenarios. The tool also calculates the top 5 priority grid cells with BRG sites to reduce emissions; emissions in these grid cells contribute the highest fraction of smoke exposure to the receptor. Map layers can be turned on and off from the 'Layers' dropdown list.
+After submitting a scenario, please wait a few seconds (~a few seconds with fast internet speed). Legends will display in the left panel below the 'Submit Scenario' button, and map layers will display in the middle panel. Three charts will be generated and displayed in the right panel: 1. Timeseries of smoke PM<sub>2.5</sub> exposure at the receptor, 2. Pie chart of smoke PM<sub>2.5</sub> contribution by Indonesia province, and 3. Table of attributable mortality for the current and business-as-usual (BAU) scenarios. The tool also calculates the top 5 priority grid cells with BRG sites to reduce emissions; emissions in these grid cells contribute the highest fraction of smoke exposure to the receptor. Map layers can be turned on and off from the 'Layers' dropdown list.
 <br><br>
 
 ## Google Earth Engine Code Editor GUI

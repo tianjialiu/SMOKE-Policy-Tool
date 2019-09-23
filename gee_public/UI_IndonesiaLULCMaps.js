@@ -76,7 +76,7 @@ panelNames.forEach(function(name, index) {
   }
   if (index == 3) {
     map.addLayer(conservation.selfMask(),{palette:[conservation_ramp[0]],opacity:0.8},'Conservation Areas');
-    map.addLayer(brg_sites.selfMask(),{palette:[conservation_ramp[1]],opacity:0.8},'Conservation Areas');
+    map.addLayer(brg_sites.selfMask(),{palette:[conservation_ramp[1]],opacity:0.8},'BRG Sites');
     map.add(plotParams.discreteLegendMap('Conservation',
       ['Conservation Areas','BRG Sites'],conservation_ramp));
   }
