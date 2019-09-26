@@ -23,13 +23,19 @@ exports.yearPanel = function() {
   var inputYearSlider = ui.Slider({min: 2005, max: 2029, value: 2006, step: 1});
   inputYearSlider.style().set('stretch', 'horizontal');
   
+  inputYearSlider.onChange(function(slideYear) {
+    return metYearSlider.setValue(smokePM.closestMetYear[slideYear]);
+  });
+  
   var metYearLabel = ui.Label('2) Meteorology Year:', {fontSize: '14.5px'});
   var metYearSlider = ui.Slider({min: 2005, max: 2009, value: 2006, step: 1});
   metYearSlider.style().set('stretch', 'horizontal');
   
+  var metYearMessage = ui.Label('If you select a scenario year from 2005-2018, the meteorology year moves to the most closely matched meterology year (from 2005-2009) based on the average Jul-Oct rainfall rate.',
+    {margin: '2px 8px 6px 15px', color: '#888', fontSize: '12px'});
   var metYearDescription = ui.Label('Jul-Oct Rainfall Rank: 0 (driest) - 10 (wettest)',
     {margin: '1px 0px 0px 25px', color: '#888', fontSize: '13.8px', fontWeight:'410'});
-  var metYearRanking = ui.Label('2005: [6.5], 2006: [1.5], 2007: [6], 2008: [9], 2009: [3]',
+  var metYearRanking = ui.Label('2005: [7], 2006: [1.5], 2007: [6], 2008: [9], 2009: [3.5]',
     {margin: '3px 0px 8px 12px', color: '#999', fontSize: '13.5px'});
     
   return ui.Panel([
@@ -38,7 +44,7 @@ exports.yearPanel = function() {
         ui.Panel.Layout.Flow('vertical'), {stretch: 'horizontal'}),
       inputYearSectionLabel, ui.Panel([inputYearLabel, inputYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}),
       ui.Panel([metYearLabel, metYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}),
-      metYearDescription, metYearRanking
+      metYearMessage, metYearDescription, metYearRanking
     ]);
 };
 
@@ -69,7 +75,9 @@ exports.getReceptor = function(receptorSelectPanel) {
 exports.csn_csvPanel = function(csn_csvBox, controlPanel) {
   controlPanel.add(ui.Label('4) (Optional) Remove Emissions From:', {fontWeight: 400, color: 'red', fontSize: '14.5px'}));
   
-  controlPanel.add(ui.Label('Concessions:', {margin: '-2px 0px -2px 8px', stretch: 'horizontal'}));
+  controlPanel.add(ui.Label('Concessions:', {margin: '-2px 0px -2px 8px', stretch: 'horizontal'},
+    'https://smokepolicytool.users.earthengine.app/view/indonesia-lulc-maps'));
+    
   controlPanel.add(ui.Panel([
     ui.Panel([csn_csvBox[0]], null, {margin: '-2px -10px 2px 5px', stretch: 'horizontal'}),
     ui.Panel([csn_csvBox[1]], null, {margin: '-2px -10px -2px 2px', stretch: 'horizontal'}),
@@ -77,7 +85,9 @@ exports.csn_csvPanel = function(csn_csvBox, controlPanel) {
   ],
   ui.Panel.Layout.Flow('horizontal'), {margin: '2px 0px 4px 0px', stretch: 'horizontal'}));
   
-  controlPanel.add(ui.Label('Other Regions/Conservation:', {margin: '-1px 0px 4px 8px', stretch: 'horizontal'}));
+  controlPanel.add(ui.Label('Other Regions/Conservation:', {margin: '-1px 0px 4px 8px', stretch: 'horizontal'},
+    'https://smokepolicytool.users.earthengine.app/view/indonesia-lulc-maps'));
+
   controlPanel.add(ui.Panel([
     ui.Panel([csn_csvBox[3]], null, {margin: '-2px -10px -2px 5px', stretch: 'horizontal'}),
     ui.Panel([csn_csvBox[4]], null, {margin: '-10px -10px -2px 2px', stretch: 'horizontal'}),

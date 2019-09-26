@@ -346,3 +346,39 @@ exports.getEmissTotal = function(inputYear,metYear,inSpecies,inMask) {
   return ee.Number(ee.FeatureCollection(emissPartTotal)
     .aggregate_sum('sum')).format('%.2f');
 };
+
+// Assign default adjoint year based on rainfall
+exports.closestMetYear = {
+  1987: 2006,
+  1988: 2008,
+  1989: 2008,
+  1990: 2009,
+  1991: 2006,
+  1992: 2009,
+  1993: 2006,
+  1994: 2006,
+  1995: 2007,
+  1996: 2008,
+  1997: 2006,
+  1998: 2008,
+  1999: 2005,
+  2000: 2007,
+  2001: 2009,
+  2002: 2006,
+  2003: 2007,
+  2004: 2006,
+  2005: 2005,
+  2006: 2006,
+  2007: 2007,
+  2008: 2008,
+  2009: 2009,
+  2010: 2008,
+  2011: 2009,
+  2012: 2007,
+  2013: 2005,
+  2014: 2009,
+  2015: 2006,
+  2016: 2008,
+  2017: 2008,
+  2018: 2009
+};
