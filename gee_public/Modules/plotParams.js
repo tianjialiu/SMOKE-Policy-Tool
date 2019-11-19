@@ -199,7 +199,7 @@ var continuousLegend = function(controlPanel, title, colPal, minVal,
 exports.legendPanel = function(controlPanel) {
   controlPanel.add(ui.Label('----------------------------------------------------------------------------------',
     {margin: '-10px 8px 12px 8px', stretch: 'horizontal', textAlign: 'center'}));
-  controlPanel.add(ui.Label('Legends', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 8px 8px'}));
+  controlPanel.add(ui.Label('Legends', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 8px 15px'}));
 
   discreteLegend(controlPanel,'Land Use/ Land Cover',
     ['Intact Forest','Degraded Forest','Non-Forest','Plantations + Secondary Forest'],
@@ -224,6 +224,8 @@ exports.legendPanel = function(controlPanel) {
   
   continuousLegend(controlPanel,'Baseline Mortality, 2005',
     smokeHealth.mortalityColRamp, 0, 10, 'people in thousands', 18.975, 293);
+    
+  controlPanel.add(ui.Label('', {margin: '0 0 5px 0px'}));
 };
 
 exports.brgLegend = function() {
