@@ -172,6 +172,22 @@ exports.getPM = function(inputYear,metYear,receptor,inMask) {
   return(ee.FeatureCollection(emissReceptor));
 };
 
+exports.getPMall = function(PMts,PMts_BAU) {
+
+  var emissReceptor = ee.List.sequence(1,12,1).map(function(iMonth) {
+    var filterMon = ee.Filter.calendarRange(iMonth,iMonth,'month');
+    
+    var inDate = ee.Feature(PMts.filter(filterMon).first()).get('system:time_start');
+    var PMmon = ee.Feature(PMts.filter(filterMon).first()).get('Smoke_PM2p5');
+    var PMmon_BAU = ee.Feature(PMts_BAU.filter(filterMon).first()).get('Smoke_PM2p5');
+
+    var PMtsMon = ee.Feature(null, {Custom: PMmon, BAU: PMmon_BAU});
+    
+    return PMtsMon.set('system:time_start',inDate);
+  });
+  return(ee.FeatureCollection(emissReceptor));
+};
+
 // =============
 // Display Maps
 // =============
@@ -257,66 +273,68 @@ exports.emissColRamp = ['#FFFFFF','#FFFFB2','#FED976','#FEB24C','#FD8D3C',
 // ===============
 // Display Charts
 // ===============
+var colPal_scenario = {
+  0: {color: '000000'},
+  1: {color: '0070BF'},
+};
+
 // Smoke PM2.5 (μg m-3) time series, monthly average
-exports.getPMchart = function(PMts,PMavg,OCtot,BCtot,plotPanel) {
-  plotPanel = plotPanel.clear();
-  var PMchart = ui.Chart.feature.byFeature(PMts,'system:time_start','Smoke_PM2p5')
-    .setOptions({
-      title: 'Population-Weighted Smoke PM2.5 Exposure',
+var getPMchart = function(PMall) {
+  var PMchart = ui.Chart.feature.byFeature({
+    features: PMall,
+    xProperty: 'system:time_start',
+    yProperties: ['Custom','BAU']
+  }).setOptions({
+      title: 'Monthly Smoke PM2.5 Exposure',
+      titleTextStyle: {fontSize: '13.5'},
       hAxis: {'format':'MMM'},
-      vAxis: {title: 'Smoke PM2.5 (μg/m³)'},
-      legend: {position: 'none'},
+      vAxis: {
+        title: 'Population-Weighted Smoke PM2.5 (μg/m³)',
+        titleTextStyle: {fontSize: '11.5'}
+      },
       lineWidth: 2,
       pointSize: 5,
+      series: colPal_scenario
     });
-  plotPanel.add(PMchart);
-
-  plotPanel.add(ui.Label('Jul-Oct Mean PM2.5: ' + PMavg.getInfo() + ' μg/m³',
-    {margin: '-10px 0px -5px 25px', padding: '0px 0px 8px 0px', stretch: 'horizontal'}));
-  plotPanel.add(ui.Label('Jul-Oct Total OC: ' + OCtot.getInfo() + ' Tg | Total BC: ' + BCtot.getInfo() + ' Tg',
-    {margin: '0px 0px -5px 25px', padding: '0px 0px 10px 0px', stretch: 'horizontal'}));
+  return PMchart;
 };
 
-// Contribution of PM2.5 exposure by Indonesian province
-exports.getPMContrByProvChart = function(PMmap,plotPanel) {
-  var PMprov = PMmap.reduceRegions({
-    collection: IDNprovS,
-    reducer: ee.Reducer.sum().unweighted(),
-    crs: crsLatLon,
-    crsTransform: gfed_gridRes
+// Smoke PM2.5 (μg m-3) time series, Jul-Oct average
+var getMeanPMchart = function(PMall) {
+  var PMall_fs = PMall
+    .filter(ee.Filter.calendarRange(sMonth,eMonth,'month'));
+  
+  var PMavg = ee.FeatureCollection([
+    ee.Feature(null, {'xName': '',
+      'BAU': PMall_fs.aggregate_mean('BAU'),
+      'Custom': PMall_fs.aggregate_mean('Custom')})
+  ]);
+  
+  var meanPMchart = ui.Chart.feature.byFeature({
+    features: PMavg,
+    xProperty: 'xName',
+    yProperties: ['BAU','Custom']
+  }).setChartType('ColumnChart')
+  .setOptions({
+    title: 'Mean Smoke PM2.5 (Jul-Oct)',
+    titleTextStyle: {fontSize: '13.5'},
+    vAxis: {
+      title: 'Population-Weighted Smoke PM2.5 (μg/m³)',
+      titleTextStyle: {fontSize: '11.5'},
+      viewWindowMode:'explicit',
+      viewWindow: {min: 0}
+    },
+    hAxis: {
+      title: null
+    },
+    series: colPal_scenario
   });
-
-  var PMProvChart = ui.Chart.feature.byFeature(
-    PMprov.sort('sum',false),'NAME','sum')
-    .setChartType('PieChart')
-    .setOptions({
-      title: 'Smoke PM2.5 Contribution by Province',
-      legend: 'NAME_1',
-    });
-  plotPanel.add(PMProvChart);
-};
-
-// =============
-// Display Text
-// =============
-// Jul-Oct average PM2.5 exposure (μg m-3)
-exports.getPMavg = function(inputYear,metYear,receptor,inMask) {
-  var inArea = ee.Image(areaLULCtr.filter(ee.Filter.calendarRange(inputYear-4,inputYear,'year')).first());
-  var areaSum = inArea.reduce(ee.Reducer.sum());
-  var inSens = getSensitivity(receptor,adjointFolder_ds);
-
-  var emissReceptor = ee.List.sequence(sMonth,eMonth,1).map(function(iMonth) {
-    var emissReceptorMon = getEmissReceptorMon(iMonth,metYear,inSens,inArea,
-      areaSum,inMask);
-      
-    return imageToFeature(emissReceptorMon,outputRegion);
-  });
-  return ee.Number(ee.FeatureCollection(emissReceptor)
-    .aggregate_mean('sum')).format('%.2f');
+  
+  return meanPMchart;
 };
 
 // Jul-Oct total OC & BC emissions (Tg)
-exports.getEmissTotal = function(inputYear,metYear,inSpecies,inMask) {
+exports.getEmissTotal = function(inputYear,metYear,inMask,scenario) {
   var inArea = ee.Image(areaLULCtr.filter(ee.Filter.calendarRange(inputYear-4,inputYear,'year')).first());
   var filterYr = ee.Filter.calendarRange(metYear,metYear,'year');
   
@@ -337,14 +355,112 @@ exports.getEmissTotal = function(inputYear,metYear,inSpecies,inMask) {
       
       // Convert OC, BC from g to Tg
       var oc_bc_emiss = oc_emiss.addBands(bc_emiss)
-        .select(inSpecies).multiply(maskMon).multiply(1e-12)
+        .multiply(maskMon).multiply(1e-12)
         .reproject({crs: crsLatLon, crsTransform: gfed_gridRes});
 
       return imageToFeature(oc_bc_emiss,outputRegion);
     });
    
-  return ee.Number(ee.FeatureCollection(emissPartTotal)
-    .aggregate_sum('sum')).format('%.2f');
+  emissPartTotal = ee.FeatureCollection(emissPartTotal);
+  
+  var emiss = ee.Feature(null, {
+    'Scenario': scenario,
+    'OC': emissPartTotal.aggregate_sum('OC'),
+    'BC': emissPartTotal.aggregate_sum('BC')
+  });
+  
+  return emiss;
+};
+
+var colPal_emiss = {
+  0: {color: 'CD5C5C'},
+  1: {color: 'FDB751'},
+};
+
+// Jul-Oct total OC & BC emissions (Tg)
+var getEmissChart = function(emissTot,emissTot_BAU) {
+  
+  var emissTotAll = ee.FeatureCollection([emissTot_BAU,emissTot]);
+  var emissChart = ui.Chart.feature.byFeature({
+    features: emissTotAll,
+    xProperty: 'Scenario',
+    yProperties: ['OC','BC']
+  }).setChartType('ColumnChart')
+  .setOptions({
+    title: 'Total Fire Emissions (Jul-Oct)',
+    titleTextStyle: {fontSize: '13.5'},
+    hAxis: {
+      viewWindowMode:'explicit',
+      viewWindow: {min: 0}
+    },
+    vAxis: {
+      title: 'OC+BC Emissions (Tg)',
+      titleTextStyle: {fontSize: '11.5'},
+    },
+    isStacked: true,
+    series: colPal_emiss
+  });
+  
+  return emissChart;
+};
+
+exports.getPMemiChart = function(PMall,emissTot,emissTot_BAU,plotPanel) {
+  
+  plotPanel = plotPanel.clear();
+  
+  var PMemiChart = getPMchart(PMall);
+  plotPanel.add(PMemiChart);
+  
+  var switchPMcharts = ui.Select({
+    items: ['Monthly PM2.5 Time Series','Mean Jul-Oct PM2.5','Total Jul-Oct OC+BC'],
+    value: 'Monthly PM2.5 Time Series',
+    onChange: function(selected) {
+      plotPanel.remove(PMemiChart);
+      if (selected == 'Monthly PM2.5 Time Series') {
+        PMemiChart = getPMchart(PMall);
+      }
+      if (selected == 'Mean Jul-Oct PM2.5') {
+        PMemiChart = getMeanPMchart(PMall);
+      }
+      if (selected == 'Total Jul-Oct OC+BC') {
+        PMemiChart = getEmissChart(emissTot,emissTot_BAU);
+      }
+      plotPanel.insert(0,PMemiChart);
+    },
+    style: {
+      margin: '0px 75px 8px 8px',
+      stretch: 'horizontal'
+    }
+  });
+  
+  var switchPMchartsLabel = ui.Label('Change Plot:', {margin: '5px 15px 8px 22px', fontSize: '14px'});
+  var switchPMchartsPanel = ui.Panel({
+    widgets: [switchPMchartsLabel,switchPMcharts],
+    layout: ui.Panel.Layout.Flow('horizontal'),
+    style: {margin: '-12px 30px 8px 0px'}
+  });
+  
+  plotPanel.add(switchPMchartsPanel);
+};
+
+// Contribution of PM2.5 exposure by Indonesian province
+exports.getPMContrByProvChart = function(PMmap,plotPanel) {
+  var PMprov = PMmap.reduceRegions({
+    collection: IDNprovS,
+    reducer: ee.Reducer.sum().unweighted(),
+    crs: crsLatLon,
+    crsTransform: gfed_gridRes
+  });
+
+  var PMProvChart = ui.Chart.feature.byFeature(
+    PMprov.sort('sum',false),'NAME','sum')
+    .setChartType('PieChart')
+    .setOptions({
+      title: 'Smoke PM2.5 Contribution by Province',
+      titleTextStyle: {fontSize: '13.5'},
+      legend: 'NAME_1',
+    });
+  plotPanel.add(PMProvChart);
 };
 
 // Assign default adjoint year based on rainfall
@@ -380,5 +496,6 @@ exports.closestMetYear = {
   2015: 2006,
   2016: 2008,
   2017: 2008,
-  2018: 2009
+  2018: 2009,
+  2019: 2006
 };

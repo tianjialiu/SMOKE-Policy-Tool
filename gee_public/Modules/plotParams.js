@@ -31,11 +31,11 @@ exports.yearPanel = function() {
   var metYearSlider = ui.Slider({min: 2005, max: 2009, value: 2006, step: 1});
   metYearSlider.style().set('stretch', 'horizontal');
   
-  var metYearMessage = ui.Label('If you select a scenario year from 2005-2018, the meteorology year moves to the most closely-matched meteorology year (from 2005-2009) based on the average Jul-Oct rainfall rate.',
+  var metYearMessage = ui.Label('If you select a scenario year from 2005-2019, the meteorology year moves to the most closely-matched meteorology year (from 2005-2009) based on the average Jul-Oct rainfall rate.',
     {margin: '2px 8px 6px 15px', color: '#888', fontSize: '12px'});
   var metYearDescription = ui.Label('Jul-Oct Rainfall Rank: 0 (driest) - 10 (wettest)',
     {margin: '1px 0px 0px 25px', color: '#888', fontSize: '13.8px', fontWeight:'410'});
-  var metYearRanking = ui.Label('2005: [7], 2006: [1.5], 2007: [6], 2008: [9], 2009: [3.5]',
+  var metYearRanking = ui.Label('2005: [7], 2006: [1.5], 2007: [6.5], 2008: [9], 2009: [3.5]',
     {margin: '3px 0px 8px 12px', color: '#999', fontSize: '13.5px'});
     
   return ui.Panel([
@@ -129,7 +129,7 @@ exports.submitButton = function() {
   return ui.Button({label: 'Submit Scenario',  style: {stretch: 'horizontal'}});
 };
 
-exports.waitMessage = ui.Label(' *** Computations will take a few seconds to be completed *** ', {margin: '-4px 8px 12px 8px', fontSize: '11.6px', textAlign: 'center', stretch: 'horizontal'});
+exports.waitMessage = ui.Label(' * Computations will take a few seconds to be completed * ', {margin: '-4px 8px 12px 8px', fontSize: '11.6px', textAlign: 'center', stretch: 'horizontal'});
 
 // --------
 // Legends
@@ -327,4 +327,4 @@ exports.discreteLegendMap = function(title, labels, colPal) {
 // -----------
 // Plot Panel
 // -----------
-exports.plotPanelLabel = ui.Label('Public Health Impacts', {fontWeight: 'bold', fontSize: '20px', margin: '12px 8px -3px 22px'});
+exports.plotPanelLabel = ui.Label('Public Health Impacts', {fontWeight: 'bold', fontSize: '20px', margin: '12px 8px 3px 22px'});

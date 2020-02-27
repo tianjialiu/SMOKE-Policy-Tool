@@ -5,8 +5,8 @@
 // =================================================================
 // *****************************************************************
 
-// Author: Tianjia Liu
-// Last updated: August 22, 2018
+// @author Tianjia Liu (tianjialiu@g.harvard.edu)
+// Last updated: February 26, 2020
 
 // UI LULC Maps adapted and modified from code by Gennadii Donchyts
 // (https://code.earthengine.google.com/f0011ae8554cf924176fd7a931a38add)
@@ -36,7 +36,7 @@ var lulcMapTS2 = ee.Image(lulcMap.get(1)).rename('lulc_end_timestep');
 var stableTrans = smokeLULC.getStableTrans(lulcMapTS1,lulcMapTS2);
 
 // Map 3: Concessions
-var projFolder = 'projects/IndonesiaPolicyTool/';
+var projFolder = 'users/smokepolicytool/';
 var oilpalm = ee.Image(projFolder + 'IDN_masks/IDN_oilpalm');
 var timber = ee.Image(projFolder + 'IDN_masks/IDN_timber');
 var logging = ee.Image(projFolder + 'IDN_masks/IDN_logging');
@@ -107,4 +107,17 @@ ui.root.widgets().reset([title, mapGrid]);
 ui.root.setLayout(ui.Panel.Layout.Flow('vertical'));
 
 // Center the maps in Indonesia
-maps[0].setCenter(105,-2,5);
+// Set url link based on map pan/zoom
+if (ui.url.get('lon') === undefined) {
+  maps[0].setCenter(105,-2,5);
+  ui.url.set({'lon':105,'lat':-2,'zoom':5});
+} else {
+  maps[0].setCenter(ui.url.get('lon'),ui.url.get('lat'),ui.url.get('zoom'));
+}
+
+maps[0].onChangeCenter(function(coord) {
+  ui.url.set({
+    'lon':coord.lon,'lat':coord.lat,
+    'zoom':maps[0].getZoom()});
+});
+

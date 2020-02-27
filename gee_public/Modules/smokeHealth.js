@@ -164,7 +164,7 @@ var calcAllMortality = function(PMts, receptor, scenario) {
 };
 
 exports.getMortalityChart = function(PMts, PMts_BAU, receptor, plotPanel) {
-  var mortalityCI = calcAllMortality(PMts, receptor, 'Current');
+  var mortalityCI = calcAllMortality(PMts, receptor, 'Custom');
   var mortalityCI_BAU = calcAllMortality(PMts_BAU, receptor, 'BAU');
   var mortalityCI_all = ee.FeatureCollection([mortalityCI, mortalityCI_BAU]);
   
@@ -176,13 +176,13 @@ exports.getMortalityChart = function(PMts, PMts_BAU, receptor, plotPanel) {
       
   var mortalityChartPanel = ui.Panel({
     widgets: [mortalityChart],
-    style: {padding: '0 0 0 16px'}
+    style: {padding: '0 0 0 14px'}
   });
   
   plotPanel.add(mortalityChartPanel);
   
-  plotPanel.add(ui.Label('Adults All-Cause: ' + mortalityCI.get('Age 25+').getInfo(),
-    {margin: '-10px 0px -5px 25px', padding: '10px 0px 8px 0px', stretch: 'horizontal'}));
-  plotPanel.add(ui.Label('Children Acute Lower Respiratory Infection (ALRI): ' + mortalityCI.get('Age 0-4').getInfo(),
-    {margin: '0px 0px 8px 25px', padding: '0px 0px 8px 0px', stretch: 'horizontal'}));
+  plotPanel.add(ui.Label('* Adults (Age 25+): All-Cause',
+    {margin: '-10px 0px -5px 22px', padding: '10px 0px 8px 0px', fontSize: '12.5px', stretch: 'horizontal'}));
+  plotPanel.add(ui.Label('* Children (Ages 0-4): Acute Lower Respiratory Infection',
+    {margin: '0px 0px 8px 22px', padding: '0px 0px 8px 0px', fontSize: '12.5px', stretch: 'horizontal'}));
 };

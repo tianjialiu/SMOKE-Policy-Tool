@@ -5,8 +5,8 @@
 // *****************************************************************
 /*
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
-// Author: Tianjia Liu
-// Last updated: September 26, 2019
+// @author Tianjia Liu (tianjialiu@g.harvard.edu)
+// Last updated: January 8, 2019
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
@@ -31,7 +31,7 @@
 
 // 1. Oil Palm, 2. Timber, 3. Logging (Concessions)
 // 4. Peatlands, 5. Conservation Areas, 6. BRG Sites (Other Regions/Conservation)
-// * 'UI LULC Maps' can be used to visualize the locations of
+// * 'UI_IndonesiaLULCMaps.js' can be used to visualize the locations of
 // land use/ land cover, concessions, and conservation areas *
 
 // 7. Indonesian Provinces
@@ -190,10 +190,12 @@ submitButton.onClick(function() {
   // Display Charts:
   var PMts = smokePM.getPM(inputYear,metYear,receptor,inMask);
   var PMts_BAU = smokePM.getPM(inputYear,metYear,receptor,bauMask);
-  var PMavg = smokePM.getPMavg(inputYear,metYear,receptor,inMask);
-  var OCtot = smokePM.getEmissTotal(inputYear,metYear,'OC',inMask);
-  var BCtot = smokePM.getEmissTotal(inputYear,metYear,'BC',inMask);
-  smokePM.getPMchart(PMts,PMavg,OCtot,BCtot,plotPanel);
+  var PMall = smokePM.getPMall(PMts,PMts_BAU);
+  
+  var emissTot = smokePM.getEmissTotal(inputYear,metYear,inMask,'Custom');
+  var emissTot_BAU = smokePM.getEmissTotal(inputYear,metYear,bauMask,'BAU');
+  
+  smokePM.getPMemiChart(PMall,emissTot,emissTot_BAU,plotPanel);
   smokePM.getPMContrByProvChart(PMExposureMap,plotPanel);
   smokeHealth.getMortalityChart(PMts,PMts_BAU,receptor,plotPanel);
 });
