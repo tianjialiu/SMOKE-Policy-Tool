@@ -270,6 +270,9 @@ exports.getEmissMap = function(inputYear,metYear,receptor,inMask) {
 exports.emissColRamp = ['#FFFFFF','#FFFFB2','#FED976','#FEB24C','#FD8D3C',
   '#FC4E2A','#E31A1C','#B10026'];
 
+exports.scenarioColRamp = ['#000000','#252525','#525252','#737373','#969696',
+  '#BDBDBD','#D9D9D9','#F0F0F0'];
+  
 // ===============
 // Display Charts
 // ===============

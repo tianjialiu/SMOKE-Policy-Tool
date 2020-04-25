@@ -18,6 +18,9 @@ exports.yearPanel = function() {
   var paperLabel = ui.Label('Citation: Marlier et al. (2019, GeoHealth)', {margin: '5px 0px 5px 8px', fontSize: '12.5px'}, 'https://doi.org/10.1029/2019GH000191');
   var githubRepoLabel = ui.Label('GitHub: Code/Info', {margin: '0px 0px 5px 8px', fontSize: '12.5px'}, 'https://github.com/tianjialiu/SMOKE-Policy-Tool');
 
+  var headDivider = ui.Panel(ui.Label(),ui.Panel.Layout.flow('horizontal'),
+    {margin: '10px 0px 5px 0px',height:'1.25px',border:'0.75px solid black',stretch:'horizontal'});
+  
   var inputYearSectionLabel = ui.Label('Design Scenario', {margin: '8px 8px 5px 8px', fontWeight: 'bold', fontSize: '20px'});
   var inputYearLabel = ui.Label('1) Scenario Year:', {fontSize: '14.5px'});
   var inputYearSlider = ui.Slider({min: 2005, max: 2029, value: 2006, step: 1});
@@ -40,7 +43,7 @@ exports.yearPanel = function() {
     
   return ui.Panel([
       policyToolLabel, ui.Panel([ui.Panel([infoLabel, websiteLabel],ui.Panel.Layout.Flow('vertical')),
-        paperLabel, githubRepoLabel],
+        paperLabel, githubRepoLabel, headDivider],
         ui.Panel.Layout.Flow('vertical'), {stretch: 'horizontal'}),
       inputYearSectionLabel, ui.Panel([inputYearLabel, inputYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}),
       ui.Panel([metYearLabel, metYearSlider], ui.Panel.Layout.Flow('horizontal'), {stretch: 'horizontal'}),
@@ -134,7 +137,19 @@ exports.waitMessage = ui.Label(' * Computations will take a few seconds to be co
 // --------
 // Legends
 // --------
-var discreteLegend = function(controlPanel, title, labels, colPal) {
+var getLayerCheck = function(map, label, value, layerPos) {
+  var checkLayer = ui.Checkbox({label: label, value: value,  
+    style: {fontWeight: 'bold', fontSize: '16px', margin: '7px 0 8px 8px'}});
+  
+  checkLayer.onChange(function(checked) {
+    var mapLayer = map.layers().get(layerPos);
+    mapLayer.setShown(checked);
+  });
+
+  return checkLayer;
+};
+
+var discreteLegend = function(controlPanel, map, title, labels, colPal, showValue, layerPos) {
   var discreteLegendPanel = ui.Panel({
     style: {
       padding: '0px 0px 5px 8px'
@@ -142,7 +157,7 @@ var discreteLegend = function(controlPanel, title, labels, colPal) {
   });
   controlPanel.add(discreteLegendPanel);
    
-  var legendTitle = ui.Label(title, {fontWeight: 'bold', fontSize: '16px', margin: '0 0 6px 8px'});
+  var legendTitle = getLayerCheck(map, title, showValue, layerPos);
   discreteLegendPanel.add(legendTitle);
   
   var makeRow = function(colPal, labels) {
@@ -163,8 +178,8 @@ var discreteLegend = function(controlPanel, title, labels, colPal) {
   }
 };
 
-var continuousLegend = function(controlPanel, title, colPal, minVal,
-  maxVal, units, stretchFactor, maxValPos) {
+var continuousLegend = function(controlPanel, map, title, colPal, minVal,
+  maxVal, units, stretchFactor, maxValPos, showValue, layerPos) {
   var continuousLegendPanel = ui.Panel({
     style: {
       padding: '0px 0px 5px 8px'
@@ -172,7 +187,7 @@ var continuousLegend = function(controlPanel, title, colPal, minVal,
   });
   controlPanel.add(continuousLegendPanel);
   
-  var legendTitle = ui.Label(title, {fontWeight: 'bold', fontSize: '16px', margin: '0 0 6px 8px'});
+  var legendTitle = getLayerCheck(map, title, showValue, layerPos);
   continuousLegendPanel.add(legendTitle);
   continuousLegendPanel.add(ui.Label(units,{margin: '-6px 0 6px 8px'}));
 
@@ -196,70 +211,44 @@ var continuousLegend = function(controlPanel, title, colPal, minVal,
   continuousLegendPanel.add(ui.Label(maxVal,{margin: '-17px 5px 0px ' + maxValPos + 'px', textAlign: 'right'}));
 };
 
-exports.legendPanel = function(controlPanel) {
-  controlPanel.add(ui.Label('----------------------------------------------------------------------------------',
-    {margin: '-10px 8px 12px 8px', stretch: 'horizontal', textAlign: 'center'}));
+exports.legendPanel = function(controlPanel, map) {
+  var footDivider = ui.Panel(ui.Label(),ui.Panel.Layout.flow('horizontal'),
+    {margin: '0px 0px 20px 0px',height:'1px',border:'1.25px solid black',stretch:'horizontal'});
+  
+  controlPanel.add(footDivider);
   controlPanel.add(ui.Label('Legends', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 8px 15px'}));
 
-  discreteLegend(controlPanel,'Land Use/ Land Cover',
+  discreteLegend(controlPanel, map, 'Land Use/ Land Cover',
     ['Intact Forest','Degraded Forest','Non-Forest','Plantations + Secondary Forest'],
-    smokeLULC.lulc_rampReorder);
+    smokeLULC.lulc_rampReorder,true,0);
 
-  discreteLegend(controlPanel,'LULC Stable & Transitions',
+  discreteLegend(controlPanel, map, 'LULC Stable & Transitions',
     ['Stable (Non-Peat)','Transitions (Non-Peat)','Stable (Peat)','Transitions (Peat)'],
-    smokeLULC.lulcTrans_rampReorder);
+    smokeLULC.lulcTrans_rampReorder,false,2);
   
   controlPanel.add(ui.Label('', {margin: '0px 0px 4px 0px'}));
-  continuousLegend(controlPanel,'GEOS-Chem Adjoint Sensitivity',
-    smokePM.sensColRamp, 0, '10⁵', 'Jul-Oct Average, (μg m⁻³) / (g m⁻² s⁻¹)', 13.8, 291);
+  continuousLegend(controlPanel, map, 'GEOS-Chem Adjoint Sensitivity',
+    smokePM.sensColRamp, 0, '10⁵', 'Jul-Oct Average, (μg m⁻³) / (g m⁻² s⁻¹)', 13.8, 291, true, 3);
   
-  continuousLegend(controlPanel,'PM2.5 Exposure',
-    smokePM.PMRamp, 0, 20, 'Jul-Oct Average, μg m⁻³, scaled by 100', 18.975, 293);
+  continuousLegend(controlPanel, map, 'Smoke PM2.5 Contribution',
+    smokePM.PMRamp, 0, 20, 'Jul-Oct Average, μg m⁻³, scaled by 100', 18.975, 293, true, 4);
     
-  continuousLegend(controlPanel,'OC + BC Emissions',
-    smokePM.emissColRamp, 0, 5, 'Jul-Oct Average, μg m⁻² s⁻¹', 18.975, 300);
+  continuousLegend(controlPanel, map, 'OC + BC Emissions',
+    smokePM.emissColRamp, 0, 5, 'Jul-Oct Average, μg m⁻² s⁻¹', 18.975, 300, false, 5);
   
-  continuousLegend(controlPanel,'Population Density, 2005',
-    smokeHealth.popColRamp, 0, 1000, 'people km⁻²', 18.975, 279);
+  continuousLegend(controlPanel, map, 'Population Density, 2005',
+    smokeHealth.popColRamp, 0, 1000, 'people km⁻²', 18.975, 279, false, 6);
   
-  continuousLegend(controlPanel,'Baseline Mortality, 2005',
-    smokeHealth.mortalityColRamp, 0, 10, 'people in thousands', 18.975, 293);
-    
+  continuousLegend(controlPanel, map, 'Baseline Mortality, 2005',
+    smokeHealth.mortalityColRamp, 0, 10, 'people in thousands', 18.975, 293, false, 7);
+  
+  continuousLegend(controlPanel, map, 'Design Scenario Mask',
+    smokePM.scenarioColRamp.reverse(), 0, 1, 'fraction of fire emissions reduced', 18.975, 300, false, 8);
+ 
   controlPanel.add(ui.Label('', {margin: '0 0 5px 0px'}));
 };
 
-exports.brgLegend = function() {
-  var discreteLegendPanel = ui.Panel({
-    style: {
-      padding: '0 9px 2px 9px',
-      position: 'bottom-left'
-    }
-  });
-   
-  var legendTitle = ui.Label(title, {fontWeight: 'bold', fontSize: '18px', margin: '6px 0 4px 0'});
-  discreteLegendPanel.add(legendTitle);
-  
-  var makeRow = function(colPal, labels) {
-    var colorBox = ui.Label({
-      style: {
-        border: '1px solid ' + colPal,
-        padding: '8px',
-        margin: '0 0 6px 0',
-        fontSize: '14px',
-      }
-    });
-
-    var description = ui.Label({value: labels, style: {margin: '0 0 4px 6px', fontSize: '13.5px'}});
-    return ui.Panel({widgets: [colorBox, description], layout: ui.Panel.Layout.Flow('horizontal')});
-  };
-  
-  for (var i = 0; i < labels.length; i++) {
-    discreteLegendPanel.add(makeRow(colPal[i], labels[i]));
-  }
-  return discreteLegendPanel;
-};
-
-exports.brgLegend = function() {
+exports.brgLegend = function(map) {
   var colPal = ['#00BFFF', '#000000'];
   var labels = ['Top 5 Priority', 'Other'];
   
@@ -270,7 +259,15 @@ exports.brgLegend = function() {
     }
   });
    
-  brgLegendPanel.add(ui.Label('BRG Sites', {fontWeight: 'bold', fontSize: '20px', margin: '6px 0 6px 0'}));
+  var BRGcheckLayer = ui.Checkbox({label: 'BRG Sites', value: true,  
+    style: {fontWeight: 'bold', fontSize: '18px', margin: '6px 8px 10px 0px'}});
+  
+  BRGcheckLayer.onChange(function(checked) {
+    var mapLayer = map.layers().get(9);
+    mapLayer.setShown(checked);
+  });
+  
+  brgLegendPanel.add(BRGcheckLayer);
   
   var makeRow = function(colPal, labels) {
     var colorBox = ui.Label({
