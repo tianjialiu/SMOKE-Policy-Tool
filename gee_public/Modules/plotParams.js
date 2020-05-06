@@ -135,7 +135,7 @@ exports.submitButton = function() {
 exports.waitMessage = ui.Label(' * Computations will take a few seconds to be completed * ', {margin: '-4px 8px 12px 8px', fontSize: '11.6px', textAlign: 'center', stretch: 'horizontal'});
 
 // --------
-// Legends
+// Legend
 // --------
 var getLayerCheck = function(map, label, value, layerPos) {
   var checkLayer = ui.Checkbox({label: label, value: value,  
@@ -149,13 +149,12 @@ var getLayerCheck = function(map, label, value, layerPos) {
   return checkLayer;
 };
 
-var discreteLegend = function(controlPanel, map, title, labels, colPal, showValue, layerPos) {
+var discreteLegend = function(map, title, labels, colPal, showValue, layerPos) {
   var discreteLegendPanel = ui.Panel({
     style: {
       padding: '0px 0px 5px 8px'
     }
   });
-  controlPanel.add(discreteLegendPanel);
    
   var legendTitle = getLayerCheck(map, title, showValue, layerPos);
   discreteLegendPanel.add(legendTitle);
@@ -176,16 +175,17 @@ var discreteLegend = function(controlPanel, map, title, labels, colPal, showValu
   for (var i = 0; i < labels.length; i++) {
     discreteLegendPanel.add(makeRow(colPal[i], labels[i]));
   }
+  
+  return discreteLegendPanel;
 };
 
-var continuousLegend = function(controlPanel, map, title, colPal, minVal,
+var continuousLegend = function(map, title, colPal, minVal,
   maxVal, units, stretchFactor, maxValPos, showValue, layerPos) {
   var continuousLegendPanel = ui.Panel({
     style: {
       padding: '0px 0px 5px 8px'
     }
   });
-  controlPanel.add(continuousLegendPanel);
   
   var legendTitle = getLayerCheck(map, title, showValue, layerPos);
   continuousLegendPanel.add(legendTitle);
@@ -209,43 +209,39 @@ var continuousLegend = function(controlPanel, map, title, colPal, minVal,
     style: {margin: '0 0 6px 8px'}}));
   continuousLegendPanel.add(ui.Label(minVal,{margin: '-6px 0px 0px 8px'}));
   continuousLegendPanel.add(ui.Label(maxVal,{margin: '-17px 5px 0px ' + maxValPos + 'px', textAlign: 'right'}));
+  
+  return continuousLegendPanel;
 };
 
-exports.legendPanel = function(controlPanel, map) {
+exports.legendPanel = function(map) {
   var footDivider = ui.Panel(ui.Label(),ui.Panel.Layout.flow('horizontal'),
-    {margin: '0px 0px 20px 0px',height:'1px',border:'1.25px solid black',stretch:'horizontal'});
-  
-  controlPanel.add(footDivider);
-  controlPanel.add(ui.Label('Legends', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 8px 15px'}));
+    {margin: '0px 0px 18px 0px',height:'1px',border:'1.25px solid black',stretch:'horizontal'});
+  var legendLabel = ui.Label('Legend', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 5px 15px'});
 
-  discreteLegend(controlPanel, map, 'Land Use/ Land Cover',
-    ['Intact Forest','Degraded Forest','Non-Forest','Plantations + Secondary Forest'],
-    smokeLULC.lulc_rampReorder,true,0);
-
-  discreteLegend(controlPanel, map, 'LULC Stable & Transitions',
-    ['Stable (Non-Peat)','Transitions (Non-Peat)','Stable (Peat)','Transitions (Peat)'],
-    smokeLULC.lulcTrans_rampReorder,false,2);
-  
-  controlPanel.add(ui.Label('', {margin: '0px 0px 4px 0px'}));
-  continuousLegend(controlPanel, map, 'GEOS-Chem Adjoint Sensitivity',
-    smokePM.sensColRamp, 0, '10⁵', 'Jul-Oct Average, (μg m⁻³) / (g m⁻² s⁻¹)', 13.8, 291, true, 3);
-  
-  continuousLegend(controlPanel, map, 'Smoke PM2.5 Contribution',
-    smokePM.PMRamp, 0, 20, 'Jul-Oct Average, μg m⁻³, scaled by 100', 18.975, 293, true, 4);
-    
-  continuousLegend(controlPanel, map, 'OC + BC Emissions',
-    smokePM.emissColRamp, 0, 5, 'Jul-Oct Average, μg m⁻² s⁻¹', 18.975, 300, false, 5);
-  
-  continuousLegend(controlPanel, map, 'Population Density, 2005',
-    smokeHealth.popColRamp, 0, 1000, 'people km⁻²', 18.975, 279, false, 6);
-  
-  continuousLegend(controlPanel, map, 'Baseline Mortality, 2005',
-    smokeHealth.mortalityColRamp, 0, 10, 'people in thousands', 18.975, 293, false, 7);
-  
-  continuousLegend(controlPanel, map, 'Design Scenario Mask',
-    smokePM.scenarioColRamp.reverse(), 0, 1, 'fraction of fire emissions reduced', 18.975, 300, false, 8);
- 
-  controlPanel.add(ui.Label('', {margin: '0 0 5px 0px'}));
+  return ui.Panel([
+    footDivider,
+    legendLabel,
+    discreteLegend(map, 'Land Use/ Land Cover',
+      ['Intact Forest','Degraded Forest','Non-Forest','Plantations + Secondary Forest'],
+      smokeLULC.lulc_rampReorder,true,0),
+    discreteLegend(map, 'LULC Stable & Transitions',
+      ['Stable (Non-Peat)','Transitions (Non-Peat)','Stable (Peat)','Transitions (Peat)'],
+      smokeLULC.lulcTrans_rampReorder,false,2),
+    ui.Label('', {margin: '0 0 4px 0px'}),
+    continuousLegend(map, 'GEOS-Chem Adjoint Sensitivity',
+      smokePM.sensColRamp, 0, '10⁵', 'Jul-Oct Average, (μg m⁻³) / (g m⁻² s⁻¹)', 13.8, 291, true, 3),
+    continuousLegend(map, 'Smoke PM2.5 Contribution',
+      smokePM.PMRamp, 0, 20, 'Jul-Oct Average, μg m⁻³, scaled by 100', 18.975, 293, true, 4),
+    continuousLegend(map, 'OC + BC Emissions',
+      smokePM.emissColRamp, 0, 5, 'Jul-Oct Average, μg m⁻² s⁻¹', 18.975, 300, false, 5),
+    continuousLegend(map, 'Population Density, 2005',
+      smokeHealth.popColRamp, 0, 1000, 'people km⁻²', 18.975, 279, false, 6),
+    continuousLegend(map, 'Baseline Mortality, 2005',
+      smokeHealth.mortalityColRamp, 0, 10, 'people in thousands', 18.975, 293, false, 7),
+    continuousLegend(map, 'Design Scenario Mask',
+      smokePM.scenarioColRamp.reverse(), 0, 1, 'fraction of fire emissions reduced', 18.975, 300, false, 8),
+    ui.Label('', {margin: '0 0 5px 0px'})
+  ]);
 };
 
 exports.brgLegend = function(map) {
@@ -260,7 +256,7 @@ exports.brgLegend = function(map) {
   });
    
   var BRGcheckLayer = ui.Checkbox({label: 'BRG Sites', value: true,  
-    style: {fontWeight: 'bold', fontSize: '18px', margin: '6px 8px 10px 0px'}});
+    style: {fontWeight: 'bold', fontSize: '18px', margin: '8px 8px 10px 0px'}});
   
   BRGcheckLayer.onChange(function(checked) {
     var mapLayer = map.layers().get(9);
