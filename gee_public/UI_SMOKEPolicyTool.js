@@ -6,7 +6,7 @@
 /*
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // @author Tianjia Liu (tianjialiu@g.harvard.edu)
-// Last updated: May 4, 2020
+// Last updated: May 9, 2020
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on
@@ -84,7 +84,7 @@ var smokeHealth = require('users/smokepolicytool/public:Modules/smokeHealth.js')
 // Control panel
 var controlPanel = ui.Panel({
   layout: ui.Panel.Layout.flow('vertical'),
-  style: {width: '350px', maxWidth: '350px'}
+  style: {width: '355px', maxWidth: '355px'}
 });
 
 // Plot panel
@@ -147,7 +147,6 @@ submitButton.onClick(function() {
     ui.root.remove(init_panels);
     ui.root.add(ui_panels);
   }
-  controlPanel.add(plotParams.legendPanel(map));
   
   // Scenario Parameters:
   var inputYear = plotParams.getYears(yearPanel).inputYear;
@@ -171,9 +170,15 @@ submitButton.onClick(function() {
   var PMExposureMap = smokePM.getPMmap(inputYear,metYear,receptor,inMask);
   var emissMap = smokePM.getEmissMap(inputYear,metYear,receptor,inMask);
   
+  var lulcTS1Label = lulcMapTS1.get('timestep').getInfo();
+  var lulcTS2Label = lulcMapTS2.get('timestep').getInfo();
+  
+  controlPanel.add(plotParams.legendPanel(map,lulcTS1Label,lulcTS2Label));
+  
   map.clear(); map.setCenter(108,-1,6);
-  map.addLayer(lulcMapTS1.selfMask(),smokeLULC.lulc_pal,'LULC Classification ' + lulcMapTS1.get('timestep').getInfo());
-  map.addLayer(lulcMapTS2.selfMask(),smokeLULC.lulc_pal,'LULC Classification ' + lulcMapTS2.get('timestep').getInfo(), false);
+  map.setControlVisibility({layerList: false});
+  map.addLayer(lulcMapTS1.selfMask(),smokeLULC.lulc_pal,'LULC Classification ' + lulcTS1Label);
+  map.addLayer(lulcMapTS2.selfMask(),smokeLULC.lulc_pal,'LULC Classification ' + lulcTS1Label, false);
   map.addLayer(stableTrans.selfMask(),smokeLULC.lulcTrans_pal,'LULC Stable/Transitions', false);
   map.addLayer(sensitivityMap.updateMask(sensitivityMap.gt(1e4)),
     {palette: smokePM.sensColRamp, max: 1e5, opacity: 0.4},'GEOS-Chem Adjoint Sensitivity (Jul-Oct)',true);

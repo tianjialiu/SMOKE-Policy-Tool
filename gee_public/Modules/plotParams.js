@@ -137,26 +137,41 @@ exports.waitMessage = ui.Label(' * Computations will take a few seconds to be co
 // --------
 // Legend
 // --------
-var getLayerCheck = function(map, label, value, layerPos) {
+var getLayerCheck = function(map, label, value, layerPos, opacity, layerMode) {
   var checkLayer = ui.Checkbox({label: label, value: value,  
-    style: {fontWeight: 'bold', fontSize: '16px', margin: '7px 0 8px 8px'}});
+    style: {fontWeight: 'bold', fontSize: '16px', margin: '2px 0 5px 8px'}});
+  
+  if (layerMode == 'nested') {
+    checkLayer = ui.Checkbox({label: label, value: value,  
+      style: {fontSize: '15px', margin: '3px 0 5px 8px'}});
+  }
   
   checkLayer.onChange(function(checked) {
     var mapLayer = map.layers().get(layerPos);
     mapLayer.setShown(checked);
   });
+  
+  var opacityLayer = ui.Slider({min: 0, max: 1, value: opacity, step: 0.01,
+    style: {margin: '3px 3px 0px 10px'}
+  });
+  
+  opacityLayer.onChange(function(value) {
+    var mapLayer = map.layers().get(layerPos);
+    mapLayer.setOpacity(value);
+  });
 
-  return checkLayer;
+  return ui.Panel([checkLayer, opacityLayer], ui.Panel.Layout.flow('horizontal'));
 };
 
-var discreteLegend = function(map, title, labels, colPal, showValue, layerPos) {
+var discreteLegend = function(map, title, labels, colPal, showValue,
+  layerPos, opacity, layerMode) {
   var discreteLegendPanel = ui.Panel({
     style: {
-      padding: '0px 0px 5px 8px'
+      padding: '0px 0px 5px 0px'
     }
   });
    
-  var legendTitle = getLayerCheck(map, title, showValue, layerPos);
+  var legendTitle = getLayerCheck(map, title, showValue, layerPos, opacity, layerMode);
   discreteLegendPanel.add(legendTitle);
   
   var makeRow = function(colPal, labels) {
@@ -180,16 +195,16 @@ var discreteLegend = function(map, title, labels, colPal, showValue, layerPos) {
 };
 
 var continuousLegend = function(map, title, colPal, minVal,
-  maxVal, units, stretchFactor, maxValPos, showValue, layerPos) {
+  maxVal, units, stretchFactor, maxValPos, showValue, layerPos, opacity, layerMode) {
   var continuousLegendPanel = ui.Panel({
     style: {
-      padding: '0px 0px 5px 8px'
+      padding: '0px 0px 5px 0px'
     }
   });
   
-  var legendTitle = getLayerCheck(map, title, showValue, layerPos);
+  var legendTitle = getLayerCheck(map, title, showValue, layerPos, opacity, layerMode);
   continuousLegendPanel.add(legendTitle);
-  continuousLegendPanel.add(ui.Label(units,{margin: '-6px 0 6px 8px'}));
+  continuousLegendPanel.add(ui.Label(units,{margin: '-2px 0 6px 8px'}));
 
   var makeRow = function(colPal) {
     var colorBox = ui.Label('', {
@@ -213,33 +228,41 @@ var continuousLegend = function(map, title, colPal, minVal,
   return continuousLegendPanel;
 };
 
-exports.legendPanel = function(map) {
+exports.legendPanel = function(map, TS1Label, TS2Label) {
   var footDivider = ui.Panel(ui.Label(),ui.Panel.Layout.flow('horizontal'),
     {margin: '0px 0px 18px 0px',height:'1px',border:'1.25px solid black',stretch:'horizontal'});
-  var legendLabel = ui.Label('Legend', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 5px 15px'});
+  var legendLabel = ui.Label('Legend', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 8px 8px'});
 
   return ui.Panel([
     footDivider,
     legendLabel,
-    discreteLegend(map, 'Land Use/ Land Cover',
+    ui.Label('Land Use/ Land Cover', {fontWeight: 'bold', fontSize: '17px', margin: '2px 0 5px 8px'}),
+    getLayerCheck(map, 'LULC ' + TS1Label, true, 0, 1, 'nested'),
+    discreteLegend(map, 'LULC ' + TS2Label,
       ['Intact Forest','Degraded Forest','Non-Forest','Plantations + Secondary Forest'],
-      smokeLULC.lulc_rampReorder,true,0),
+      smokeLULC.lulc_rampReorder, false, 1, 1, 'nested'),
     discreteLegend(map, 'LULC Stable & Transitions',
       ['Stable (Non-Peat)','Transitions (Non-Peat)','Stable (Peat)','Transitions (Peat)'],
-      smokeLULC.lulcTrans_rampReorder,false,2),
+      smokeLULC.lulcTrans_rampReorder, false, 2, 1, 'main'),
     ui.Label('', {margin: '0 0 4px 0px'}),
     continuousLegend(map, 'GEOS-Chem Adjoint Sensitivity',
-      smokePM.sensColRamp, 0, '10⁵', 'Jul-Oct Average, (μg m⁻³) / (g m⁻² s⁻¹)', 13.8, 291, true, 3),
+      smokePM.sensColRamp, 0, '> 10⁵',
+      'Jul-Oct Average, (μg m⁻³) / (g m⁻² s⁻¹)', 15, 305, true, 3, 0.4, 'main'),
     continuousLegend(map, 'Smoke PM2.5 Contribution',
-      smokePM.PMRamp, 0, 20, 'Jul-Oct Average, μg m⁻³, scaled by 100', 18.975, 293, true, 4),
+      smokePM.PMRamp, 0, '> 20',
+      'Jul-Oct Average, μg m⁻³, scaled by 100', 20.625, 308, true, 4, 1, 'main'),
     continuousLegend(map, 'OC + BC Emissions',
-      smokePM.emissColRamp, 0, 5, 'Jul-Oct Average, μg m⁻² s⁻¹', 18.975, 300, false, 5),
+      smokePM.emissColRamp, 0, '> 5',
+      'Jul-Oct Average, μg m⁻² s⁻¹', 20.625, 315, false, 5, 1, 'main'),
     continuousLegend(map, 'Population Density, 2005',
-      smokeHealth.popColRamp, 0, 1000, 'people km⁻²', 18.975, 279, false, 6),
+      smokeHealth.popColRamp, 0, '> 1000',
+      'people km⁻²', 20.625, 294, false, 6, 1, 'main'),
     continuousLegend(map, 'Baseline Mortality, 2005',
-      smokeHealth.mortalityColRamp, 0, 10, 'people in thousands', 18.975, 293, false, 7),
+      smokeHealth.mortalityColRamp, 0, '> 10',
+      'people in thousands', 20.625, 308, false, 7, 1, 'main'),
     continuousLegend(map, 'Design Scenario Mask',
-      smokePM.scenarioColRamp.reverse(), 0, 1, 'fraction of fire emissions reduced', 18.975, 300, false, 8),
+      smokePM.scenarioColRamp.reverse(), 0, 1,
+      'fraction of fire emissions reduced', 20.625, 328, false, 8, 0.4, 'main'),
     ui.Label('', {margin: '0 0 5px 0px'})
   ]);
 };
