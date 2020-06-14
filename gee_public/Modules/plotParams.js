@@ -230,7 +230,7 @@ var continuousLegend = function(map, title, colPal, minVal,
 
 exports.legendPanel = function(map, TS1Label, TS2Label) {
   var footDivider = ui.Panel(ui.Label(),ui.Panel.Layout.flow('horizontal'),
-    {margin: '0px 0px 18px 0px',height:'1px',border:'1.25px solid black',stretch:'horizontal'});
+    {margin: '0px 0px 18px 0px',height:'1.25px',border:'0.75px solid black',stretch:'horizontal'});
   var legendLabel = ui.Label('Legend', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 8px 8px'});
 
   return ui.Panel([
@@ -257,12 +257,9 @@ exports.legendPanel = function(map, TS1Label, TS2Label) {
     continuousLegend(map, 'Population Density, 2005',
       smokeHealth.popColRamp, 0, '> 1000',
       'people km⁻²', 20.625, 294, false, 6, 1, 'main'),
-    continuousLegend(map, 'Baseline Mortality, 2005',
-      smokeHealth.mortalityColRamp, 0, '> 10',
-      'people in thousands', 20.625, 308, false, 7, 1, 'main'),
     continuousLegend(map, 'Design Scenario Mask',
       smokePM.scenarioColRamp.reverse(), 0, 1,
-      'fraction of fire emissions reduced', 20.625, 328, false, 8, 0.4, 'main'),
+      'fraction of fire emissions reduced', 20.625, 328, false, 7, 0.4, 'main'),
     ui.Label('', {margin: '0 0 5px 0px'})
   ]);
 };
@@ -282,7 +279,7 @@ exports.brgLegend = function(map) {
     style: {fontWeight: 'bold', fontSize: '18px', margin: '8px 8px 10px 0px'}});
   
   BRGcheckLayer.onChange(function(checked) {
-    var mapLayer = map.layers().get(9);
+    var mapLayer = map.layers().get(8);
     mapLayer.setShown(checked);
   });
   

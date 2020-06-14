@@ -1,20 +1,22 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var gpw2005 = ee.Image("users/smokepolicytool/IDN_adm/GPW2005");
+var gpw = ee.ImageCollection("CIESIN/GPWv411/GPW_UNWPP-Adjusted_Population_Density");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 // ==========================
 // Calculate Health Impacts
 // ==========================
 
 // Population, 2005, Gridded Population of the World (GPW) & UN-adjusted
+// (number of people)
 var population = {
   'earlyneonatal': {'Indonesia': 9.263730e4, 'Malaysia': 8.895073e3, 'Singapore': 7.186277e2},
   'lateneonatal': {'Indonesia': 2.752874e5, 'Malaysia': 2.665513e4, 'Singapore': 2.153700e3}, 
   'postneonatal':  {'Indonesia': 4.347065e6, 'Malaysia': 4.303966e5, 'Singapore': 3.439537e4},
   '1-4': {'Indonesia': 1.792731e7, 'Malaysia': 1.973355e6, 'Singapore': 1.613114e5},
-  'adult': {'Indonesia': 115498024.0, 'Malaysia': 12979736.0, 'Singapore': 2394994.0}
+  'adult': {'Indonesia': 115498024, 'Malaysia': 12979736, 'Singapore': 2394994}
 };
 
-// Mortality Rate, 2005, from Global Burden of Disease project
+// Baseline mortality rates, 2005, from Global Burden of Disease project
+// (deaths per 100,000 people)
 var mortality_rate = {
   'earlyneonatal': {'Indonesia': 2449.447916, 'Malaysia': 307.822903, 'Singapore': 138.625514},
   'lateneonatal': {'Indonesia': 855.656908, 'Malaysia': 81.248922, 'Singapore': 78.940460},
@@ -112,13 +114,9 @@ var getAttributableMortalityChild = function(receptor, exposure, age) {
 var crsLatLon = 'EPSG:4326';
 var ds_gridRes = [0.008333333333333333,0,95,0,-0.008333333333333333,6];
 
-exports.populationDensity = gpw2005.select('b1').rename('popDensity')
-  .reproject({crs: 'EPSG:4326', crsTransform: ds_gridRes});
-exports.baselineMortality = gpw2005.select('b13').rename('baselineMortality')
-  .reproject({crs: 'EPSG:4326', crsTransform: ds_gridRes});
-
-exports.mortalityColRamp = ['#FFFFFF','#EDF8E9','#C7E9C0','#A1D99B',
-  '#74C476','#41AB5D','#238B45','#005A32'];
+exports.populationDensity = gpw.select('unwpp-adjusted_population_density')
+  .filter(ee.Filter.calendarRange(2005,2005,'year')).first();
+  
 exports.popColRamp = ['#FFFFFF','#F2F0F7','#DADAEB','#BCBDDC',
   '#9E9AC8','#807DBA','#6A51A3','#4A1486'];
 
