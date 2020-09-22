@@ -9,11 +9,11 @@ The [SMOKE Policy Tool](https://smokepolicytool.users.earthengine.app/view/smoke
 (*Earth Engine Apps, no Google Earth Engine account required*)
 1. [**SMOKE Policy Tool UI**](https://smokepolicytool.users.earthengine.app/view/smoke-policy-tool): main tool for modeling and projecting the impact of Indonesian fires on public health in Equatorial Asia for 2005-2029 based on land use and land cover (LULC) classification, Global Fire Emissions Database, version 4s ([GFEDv4s](https://www.globalfiredata.org/)) fire emissions, and meteorology
 <br><br>
-![banner image](https://github.com/tianjialiu/SMOKE-Policy-Tool/blob/master/docs/imgs/SMOKEPolicyTool_EEApps.png)
+![banner image](https://github.com/tianjialiu/SMOKE-Policy-Tool/blob/main/docs/imgs/SMOKEPolicyTool_EEApps.png)
 
 2. [**Indonesia LULC Maps UI**](https://smokepolicytool.users.earthengine.app/view/indonesia-lulc-maps): ancillary tool for visualizing land use/ land cover (LULC) classification and locations of concessions and conservation areas
 <br><br>
-![banner image](https://github.com/tianjialiu/SMOKE-Policy-Tool/blob/master/docs/imgs/IndonesiaLULCMaps_EEApps.png)
+![banner image](https://github.com/tianjialiu/SMOKE-Policy-Tool/blob/main/docs/imgs/IndonesiaLULCMaps_EEApps.png)
 
 ### Step 1: Scenario Year
 *Select a year from 2005-2029.* The scenario year is linked to projections of LULC transitions in 5-year intervals; for example, all scenarios using any input year from 2005-2009 involve the same LULC transitions. Because we use 2005 and 2010 as the base LULC timesteps of the 2005-2009 LULC transitions, we consider 2005-2009 as "present" and 2010-2029 as "future."
@@ -94,7 +94,7 @@ The repository should then appear in the top-left panel under 'Reader' as 'users
 ### Step 3: Diving into the GUI
 Click the 'UI_SMOKEPolicyTool.js' script in the 'users/smokepolicytool/public' repository. The script should appear in the code editor. Click 'Run' in the top-right corner of the code editor to activate the UI.
 <br><br>
-![banner image](https://github.com/tianjialiu/SMOKE-Policy-Tool/blob/master/docs/imgs/SMOKEPolicyTool_GEE.png)
+![banner image](https://github.com/tianjialiu/SMOKE-Policy-Tool/blob/main/docs/imgs/SMOKEPolicyTool_GEE.png)
 
 ## Publications
 1. Marlier, M.E., T. Liu, K. Yu, J.J. Buonocore, S.N. Koplitz, R.S. DeFries, L.J. Mickley, D.J. Jacob, J. Schwartz, B.S. Wardhana, and S.S. Myers (2019). Fires, Smoke Exposure, and Public Health: An Integrative Framework to Maximize Health Benefits from Peatland Restoration. *GeoHealth*, 3, 178-189. https://doi.org/10.1029/2019GH000191
