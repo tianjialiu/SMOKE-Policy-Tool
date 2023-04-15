@@ -468,6 +468,12 @@ exports.getPMContrByProvChart = function(PMmap,plotPanel) {
 
 // Assign default adjoint year based on rainfall
 exports.closestMetYear = {
+  1981: 2007,
+  1982: 2006,
+  1983: 2007,
+  1984: 2005,
+  1985: 2005,
+  1986: 2007,
   1987: 2006,
   1988: 2008,
   1989: 2008,
@@ -501,5 +507,7 @@ exports.closestMetYear = {
   2017: 2008,
   2018: 2009,
   2019: 2006,
-  2020: 2008
+  2020: 2008,
+  2021: 2008,
+  2022: 2008
 };

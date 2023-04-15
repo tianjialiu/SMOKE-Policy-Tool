@@ -14,9 +14,9 @@ exports.yearPanel = function() {
   
   var infoLabel = ui.Label('The SMOKE Policy Tool models and projects the impact of Indonesian fires on public health in Equatorial Asia for 2005-2029 based on land use/ land cover classification, GFEDv4s fire emissions, and meteorology.',
     {margin: '8px 20px 2px 8px', fontSize: '12px', color: '#777'});
-  var websiteLabel = ui.Label('[Website]', {margin: '0px 0px 5px 8px', fontSize: '12.5px'}, 'https://sites.google.com/view/smokepolicytool/home');
-  var paperLabel = ui.Label('Citation: Marlier et al. (2019, GeoHealth)', {margin: '5px 0px 5px 8px', fontSize: '12.5px'}, 'https://doi.org/10.1029/2019GH000191');
-  var githubRepoLabel = ui.Label('GitHub: Code/Info', {margin: '0px 0px 5px 8px', fontSize: '12.5px'}, 'https://github.com/tianjialiu/SMOKE-Policy-Tool');
+  var websiteLabel = ui.Label('[Website]', {margin: '0px 0px 5px 8px', fontSize: '12.5px', color: '#5886E8'}, 'https://sites.google.com/view/smokepolicytool/home');
+  var paperLabel = ui.Label('Citation: Marlier et al. (2019, GeoHealth)', {margin: '5px 0px 5px 8px', fontSize: '12.5px', color: '#5886E8'}, 'https://doi.org/10.1029/2019GH000191');
+  var githubRepoLabel = ui.Label('GitHub: Code/Info', {margin: '0px 0px 5px 8px', fontSize: '12.5px', color: '#5886E8'}, 'https://github.com/tianjialiu/SMOKE-Policy-Tool');
 
   var headDivider = ui.Panel(ui.Label(),ui.Panel.Layout.flow('horizontal'),
     {margin: '10px 0px 5px 0px',height:'1.25px',border:'0.75px solid black',stretch:'horizontal'});
@@ -34,7 +34,7 @@ exports.yearPanel = function() {
   var metYearSlider = ui.Slider({min: 2005, max: 2009, value: 2006, step: 1});
   metYearSlider.style().set('stretch', 'horizontal');
   
-  var metYearMessage = ui.Label('If you select a scenario year from 2005-2020, the meteorology year moves to the most closely-matched meteorology year (from 2005-2009) based on the average Jul-Oct rainfall rate.',
+  var metYearMessage = ui.Label('If you select a scenario year from 2005-2022, the meteorology year moves to the most closely-matched meteorology year (from 2005-2009) based on the average Jul-Oct rainfall rate.',
     {margin: '2px 8px 6px 15px', color: '#888', fontSize: '12px'});
   var metYearDescription = ui.Label('Jul-Oct Rainfall Rank: 0 (driest) - 10 (wettest)',
     {margin: '1px 0px 0px 25px', color: '#888', fontSize: '13.8px', fontWeight:'410'});
@@ -78,7 +78,7 @@ exports.getReceptor = function(receptorSelectPanel) {
 exports.csn_csvPanel = function(csn_csvBox, controlPanel) {
   controlPanel.add(ui.Label('4) (Optional) Remove Emissions From:', {fontWeight: 400, color: 'red', fontSize: '14.5px'}));
   
-  controlPanel.add(ui.Label('Concessions:', {margin: '-2px 0px -2px 8px', stretch: 'horizontal'},
+  controlPanel.add(ui.Label('Concessions:', {margin: '-2px 0px -2px 8px', stretch: 'horizontal', color: '#5886E8'},
     'https://smokepolicytool.users.earthengine.app/view/indonesia-lulc-maps'));
     
   controlPanel.add(ui.Panel([
@@ -88,7 +88,7 @@ exports.csn_csvPanel = function(csn_csvBox, controlPanel) {
   ],
   ui.Panel.Layout.Flow('horizontal'), {margin: '2px 0px 4px 0px', stretch: 'horizontal'}));
   
-  controlPanel.add(ui.Label('Other Regions/Conservation:', {margin: '-1px 0px 4px 8px', stretch: 'horizontal'},
+  controlPanel.add(ui.Label('Other Regions/Conservation:', {margin: '-1px 0px 4px 8px', stretch: 'horizontal', color: '#5886E8'},
     'https://smokepolicytool.users.earthengine.app/view/indonesia-lulc-maps'));
 
   controlPanel.add(ui.Panel([
@@ -109,7 +109,7 @@ exports.getChecked = function(box, list) {
 };
 
 exports.provPanel = function(provBox) {
-  var provLabel = ui.Label('By IDs: ', {margin: '8px 6px 8px 8px', stretch: 'vertical'},
+  var provLabel = ui.Label('By IDs: ', {margin: '8px 6px 8px 8px', stretch: 'vertical', color: '#5886E8'},
     'https://sites.google.com/view/smokepolicytool/apps/step-by-step#h.p_j-FbQd21XtjU');
   return ui.Panel([provLabel,provBox], ui.Panel.Layout.Flow('horizontal'), {margin: '-5px 8px 0px 8px', stretch: 'horizontal'});
 };
