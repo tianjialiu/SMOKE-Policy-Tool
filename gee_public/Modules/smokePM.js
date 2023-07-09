@@ -47,8 +47,7 @@ var oc_ef_LULCtr = oc_ef_LULCtr.rename(LULCtr);
 var bc_ef_LULCtr = bc_ef_LULCtr.rename(LULCtr);
 
 // Conversion factors
-var sf_timeSteps = 24 * 3; // number of physical time steps in adjoint (20 min time steps),
-var sf_smokePMtracer = 24; // molecular weight of hydrophilic and hydrophilic OC, BC adjoint tracer, conversion to smoke PM2.5
+var sf_timeSteps = 24 * 24 * 3; // account for number of physical time steps in adjoint simulation
 var sf_timeDay = 24 * 60 * 60; // seconds per day
 
 // Find 3-letter code to using full name of receptor
@@ -144,7 +143,7 @@ var getEmissReceptorMon = function(inMonth,inYear,inSens,inArea,inAreaSum,inMask
   // 2. Convert downscaled accumulated monthly sensitivity (0.25deg) from
   // (μg/m3)/(kg/grid cell/timestep) to (μg/m3)/(μg/m2/day)
   var sensPart = sensMon.multiply(gfedArea).multiply(1e-9)
-    .divide(sf_timeSteps).divide(sf_smokePMtracer).divide(nDays)
+    .divide(sf_timeSteps).divide(nDays)
     .reproject({crs: crsLatLon, crsTransform: gfed_gridRes});
     
   // 3. Multiply OC + BC emissions rate by sensitivity
@@ -203,7 +202,7 @@ exports.getSensMap = function(metYear,receptor) {
   var sensAvg = sensFilter.map(function(sensMon) {
       var nDays = ee.Number(sensMon.get('ndays'));
       return sensMon.multiply(gcArea).divide(nDays).multiply(1e-3)
-        .divide(sf_timeSteps).divide(sf_smokePMtracer).multiply(sf_timeDay)
+        .divide(sf_timeSteps).multiply(sf_timeDay)
         .reproject({crs: crsLatLon, crsTransform: sens_gridRes});
     });
   
