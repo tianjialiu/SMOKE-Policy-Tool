@@ -19,7 +19,7 @@ exports.yearPanel = function() {
   var githubRepoLabel = ui.Label('GitHub: Code/Info', {margin: '0px 0px 5px 8px', fontSize: '12.5px', color: '#5886E8'}, 'https://github.com/tianjialiu/SMOKE-Policy-Tool');
 
   var headDivider = ui.Panel(ui.Label(),ui.Panel.Layout.flow('horizontal'),
-    {margin: '10px 0px 5px 0px',height:'1.25px',border:'0.75px solid black',stretch:'horizontal'});
+    {margin: '10px 0px 5px 0px',height:'1px',border:'0.75px solid black',stretch:'horizontal'});
   
   var inputYearSectionLabel = ui.Label('Design Scenario', {margin: '8px 8px 5px 8px', fontWeight: 'bold', fontSize: '20px'});
   var inputYearLabel = ui.Label('1) Scenario Year:', {fontSize: '14.5px'});
@@ -34,7 +34,7 @@ exports.yearPanel = function() {
   var metYearSlider = ui.Slider({min: 2005, max: 2009, value: 2006, step: 1});
   metYearSlider.style().set('stretch', 'horizontal');
   
-  var metYearMessage = ui.Label('If you select a scenario year from 2005-2022, the meteorology year moves to the most closely-matched meteorology year (from 2005-2009) based on the average Jul-Oct rainfall rate.',
+  var metYearMessage = ui.Label('If you select a scenario year from 2005-2023, the meteorology year moves to the most closely-matched meteorology year (from 2005-2009) based on the average Jul-Oct rainfall rate.',
     {margin: '2px 8px 6px 15px', color: '#888', fontSize: '12px'});
   var metYearDescription = ui.Label('Jul-Oct Rainfall Rank: 0 (driest) - 10 (wettest)',
     {margin: '1px 0px 0px 25px', color: '#888', fontSize: '13.8px', fontWeight:'410'});
@@ -230,7 +230,7 @@ var continuousLegend = function(map, title, colPal, minVal,
 
 exports.legendPanel = function(map, TS1Label, TS2Label) {
   var footDivider = ui.Panel(ui.Label(),ui.Panel.Layout.flow('horizontal'),
-    {margin: '0px 0px 18px 0px',height:'1.25px',border:'0.75px solid black',stretch:'horizontal'});
+    {margin: '0px 0px 18px 0px',height:'1px',border:'0.75px solid black',stretch:'horizontal'});
   var legendLabel = ui.Label('Legend', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 8px 8px'});
 
   return ui.Panel([
