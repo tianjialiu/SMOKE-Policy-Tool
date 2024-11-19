@@ -11,8 +11,8 @@ var IDNprovS = ee.FeatureCollection("users/smokepolicytool/IDN_adm/IDN_adm1_simp
 // Monthly Smoke PM2.5
 // ===============================
 var outputRegion = ee.Geometry.Rectangle([95,-11,141,6],'EPSG:4326',false);
-var adjointFolder = 'users/smokepolicytool/GC_adjoint_sensitivities/';
-var adjointFolder_ds = 'users/smokepolicytool/GC_adjoint_sensitivities_0p25deg/';
+var adjointFolder = 'projects/IndonesiaPolicyTool/GC_adjoint_sensitivities/';
+var adjointFolder_ds = 'projects/IndonesiaPolicyTool/GC_adjoint_sensitivities_0p25deg/';
 
 var crsLatLon = 'EPSG:4326';
 var ds_gridRes = [0.008333333333333333,0,95,0,-0.008333333333333333,6];
@@ -47,7 +47,7 @@ var oc_ef_LULCtr = oc_ef_LULCtr.rename(LULCtr);
 var bc_ef_LULCtr = bc_ef_LULCtr.rename(LULCtr);
 
 // Conversion factors
-var sf_timeSteps = 24 * 24 * 3; // account for number of physical time steps in adjoint simulation
+var sf_adjoint = 24 * 24 * 3; // account for number of physical time steps in adjoint simulation
 var sf_timeDay = 24 * 60 * 60; // seconds per day
 
 // Find 3-letter code to using full name of receptor
@@ -132,8 +132,8 @@ var getEmissReceptorMon = function(inMonth,inYear,inSens,inArea,inAreaSum,inMask
   var bc_phobic = bc_emiss.multiply(0.8);
   var bc_philic = bc_emiss.multiply(0.2);
     
-  var emiss_philic = oc_philic.add(bc_philic).rename('b1');
-  var emiss_phobic = oc_phobic.add(bc_phobic).rename('b2');
+  var emiss_philic = oc_philic.add(bc_philic).rename('PI');
+  var emiss_phobic = oc_phobic.add(bc_phobic).rename('PO');
   
   // 1. Convert OC + BC emissions from g/grid cell/month to μg/m2/day
   var emissPart = emiss_philic.addBands(emiss_phobic)
@@ -143,7 +143,7 @@ var getEmissReceptorMon = function(inMonth,inYear,inSens,inArea,inAreaSum,inMask
   // 2. Convert downscaled accumulated monthly sensitivity (0.25deg) from
   // (μg/m3)/(kg/grid cell/timestep) to (μg/m3)/(μg/m2/day)
   var sensPart = sensMon.multiply(gfedArea).multiply(1e-9)
-    .divide(sf_timeSteps).divide(nDays)
+    .divide(sf_adjoint).divide(nDays)
     .reproject({crs: crsLatLon, crsTransform: gfed_gridRes});
     
   // 3. Multiply OC + BC emissions rate by sensitivity
@@ -202,11 +202,11 @@ exports.getSensMap = function(metYear,receptor) {
   var sensAvg = sensFilter.map(function(sensMon) {
       var nDays = ee.Number(sensMon.get('ndays'));
       return sensMon.multiply(gcArea).divide(nDays).multiply(1e-3)
-        .divide(sf_timeSteps).multiply(sf_timeDay)
+        .divide(sf_adjoint).multiply(sf_timeDay)
         .reproject({crs: crsLatLon, crsTransform: sens_gridRes});
     });
   
-  return ee.ImageCollection(sensAvg).mean().rename(['hydrophilic','hydrophobic']).select('hydrophilic')
+  return ee.ImageCollection(sensAvg).mean().select('PI')
     .reproject({crs: crsLatLon, crsTransform: sens_gridRes});
 };
 
@@ -238,14 +238,18 @@ exports.PMRamp = ['#FFFFFF','#FBC127','#F67D15','#D44842',
 exports.getBRGmap = function(PMmap) {
   var PMbrg = PMmap.reduceRegions({
     collection: brgGrid,
-    reducer: 'max',
+    reducer: ee.Reducer.max().setOutputs(['smoke_PM2p5']),
     crs: crsLatLon,
     crsTransform: gfed_gridRes
-  }).sort('max',false);
+  }).sort('smoke_PM2p5',false);
   
+  // filter out grids with 0 contribution
   return ee.Image().byte().rename('BRG_Sites')
     .paint(ee.FeatureCollection(PMbrg.toList(100,5)), 0, 2)
-    .paint(ee.FeatureCollection(PMbrg.toList(5,0)), 1, 2);
+    .paint(ee.FeatureCollection(PMbrg
+      .filter(ee.Filter.eq('smoke_PM2p5',0)).toList(5,0)), 0, 2)
+    .paint(ee.FeatureCollection(PMbrg
+      .filter(ee.Filter.gt('smoke_PM2p5',0)).toList(5,0)), 1, 2);
 };
 
 // OC + BC Emissions, Jul-Oct average (μg m-2 s-1)
@@ -271,7 +275,10 @@ exports.emissColRamp = ['#FFFFFF','#FFFFB2','#FED976','#FEB24C','#FD8D3C',
 
 exports.scenarioColRamp = ['#000000','#252525','#525252','#737373','#969696',
   '#BDBDBD','#D9D9D9','#F0F0F0'];
-  
+
+exports.scenarioColRampRev = ['#F0F0F0','#D9D9D9','#BDBDBD','#969696','#737373',
+  '#525252','#252525','#000000'];
+
 // ===============
 // Display Charts
 // ===============
@@ -509,5 +516,7 @@ exports.closestMetYear = {
   2020: 2008,
   2021: 2008,
   2022: 2008,
-  2023: 2009
+  2023: 2009,
+  2024: 2007
 };
+

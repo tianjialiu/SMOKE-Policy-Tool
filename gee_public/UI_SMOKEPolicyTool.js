@@ -6,7 +6,7 @@
 /*
 // Documentation: https://github.com/tianjialiu/SMOKE-Policy-Tool
 // @author Tianjia Liu (tianjialiu@g.harvard.edu)
-// Last updated: January 19, 2024
+// Last updated: November 11, 2024
 
 // Purpose: model and project the impact of Indonesian fires
 // on public health in Equatorial Asia for 2005-2029 based on

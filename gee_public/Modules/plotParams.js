@@ -34,11 +34,11 @@ exports.yearPanel = function() {
   var metYearSlider = ui.Slider({min: 2005, max: 2009, value: 2006, step: 1});
   metYearSlider.style().set('stretch', 'horizontal');
   
-  var metYearMessage = ui.Label('If you select a scenario year from 2005-2023, the meteorology year moves to the most closely-matched meteorology year (from 2005-2009) based on the average Jul-Oct rainfall rate.',
+  var metYearMessage = ui.Label('If you select a scenario year from 2005-2024, the meteorology year moves to the most closely-matched meteorology year (from 2005-2009) based on the average Jul-Oct rainfall rate.',
     {margin: '2px 8px 6px 15px', color: '#888', fontSize: '12px'});
   var metYearDescription = ui.Label('Jul-Oct Rainfall Rank: 0 (driest) - 10 (wettest)',
     {margin: '1px 0px 0px 25px', color: '#888', fontSize: '13.8px', fontWeight:'410'});
-  var metYearRanking = ui.Label('2005: [7], 2006: [1.5], 2007: [6.5], 2008: [9], 2009: [3.5]',
+  var metYearRanking = ui.Label('2005: [6.5], 2006: [1.5], 2007: [6], 2008: [9], 2009: [3.5]',
     {margin: '3px 0px 8px 12px', color: '#999', fontSize: '13.5px'});
     
   return ui.Panel([
@@ -82,21 +82,21 @@ exports.csn_csvPanel = function(csn_csvBox, controlPanel) {
     'https://smokepolicytool.users.earthengine.app/view/indonesia-lulc-maps'));
     
   controlPanel.add(ui.Panel([
-    ui.Panel([csn_csvBox[0]], null, {margin: '-2px -10px 2px 5px', stretch: 'horizontal'}),
-    ui.Panel([csn_csvBox[1]], null, {margin: '-2px -10px -2px 2px', stretch: 'horizontal'}),
-    ui.Panel([csn_csvBox[2]], null, {margin: '-2px 0px -2px 18px', stretch: 'horizontal'}),
+    ui.Panel([csn_csvBox[0]], null, {margin: '0px -10px 0px 5px', stretch: 'horizontal'}),
+    ui.Panel([csn_csvBox[1]], null, {margin: '0px -10px 0px 2px', stretch: 'horizontal'}),
+    ui.Panel([csn_csvBox[2]], null, {margin: '0px 0px 0px 18px', stretch: 'horizontal'}),
   ],
-  ui.Panel.Layout.Flow('horizontal'), {margin: '2px 0px 4px 0px', stretch: 'horizontal'}));
+  ui.Panel.Layout.Flow('horizontal'), {margin: '0px 0px -4px 0px', stretch: 'horizontal'}));
   
-  controlPanel.add(ui.Label('Other Regions/Conservation:', {margin: '-1px 0px 4px 8px', stretch: 'horizontal', color: '#5886E8'},
+  controlPanel.add(ui.Label('Other Regions/Conservation:', {margin: '4px 0px 0px 8px', stretch: 'horizontal', color: '#5886E8'},
     'https://smokepolicytool.users.earthengine.app/view/indonesia-lulc-maps'));
 
   controlPanel.add(ui.Panel([
-    ui.Panel([csn_csvBox[3]], null, {margin: '-2px -10px -2px 5px', stretch: 'horizontal'}),
-    ui.Panel([csn_csvBox[4]], null, {margin: '-10px -10px -2px 2px', stretch: 'horizontal'}),
-    ui.Panel([csn_csvBox[5]], null, {margin: '-2px 0px -2px 18px', stretch: 'horizontal'}),
+    ui.Panel([csn_csvBox[3]], null, {margin: '8px -10px 0px 5px', stretch: 'horizontal'}),
+    ui.Panel([csn_csvBox[4]], null, {margin: '0px -10px 0px 2px', stretch: 'horizontal'}),
+    ui.Panel([csn_csvBox[5]], null, {margin: '8px 0px 0px 18px', stretch: 'horizontal'}),
   ],
-  ui.Panel.Layout.Flow('horizontal'), {margin: '2px 0px -4px 0px', stretch: 'horizontal'}));
+  ui.Panel.Layout.Flow('horizontal'), {margin: '0px 0px -4px 0px', stretch: 'horizontal'}));
 };
 
 exports.getChecked = function(box, list) {
@@ -231,11 +231,14 @@ var continuousLegend = function(map, title, colPal, minVal,
 exports.legendPanel = function(map, TS1Label, TS2Label) {
   var footDivider = ui.Panel(ui.Label(),ui.Panel.Layout.flow('horizontal'),
     {margin: '0px 0px 18px 0px',height:'1px',border:'0.75px solid black',stretch:'horizontal'});
-  var legendLabel = ui.Label('Legend', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 8px 8px'});
-
+  var legendLabel = ui.Label('Legend', {fontWeight: 'bold', fontSize: '20px', margin: '-3px 8px 0px 8px'});
+  var legendInstructions = ui.Label('Note: Use the sliders associated with each legend to change the opacity of map layers.',
+    {fontSize: '12px', margin: '6px 8px 8px 8px', color: '#999'});
+  
   return ui.Panel([
     footDivider,
     legendLabel,
+    legendInstructions,
     ui.Label('Land Use/ Land Cover', {fontWeight: 'bold', fontSize: '17px', margin: '2px 0 5px 8px'}),
     getLayerCheck(map, 'LULC ' + TS1Label, true, 0, 1, 'nested'),
     discreteLegend(map, 'LULC ' + TS2Label,
@@ -247,19 +250,19 @@ exports.legendPanel = function(map, TS1Label, TS2Label) {
     ui.Label('', {margin: '0 0 4px 0px'}),
     continuousLegend(map, 'GEOS-Chem Adjoint Sensitivity',
       smokePM.sensColRamp, 0, '> 10⁵',
-      'Jul-Oct Average, (μg m⁻³) / (g m⁻² s⁻¹)', 15, 305, true, 3, 0.4, 'main'),
+      'Jul-Oct Average, (μg m⁻³) / (g m⁻² s⁻¹)', 15, 307, true, 3, 0.4, 'main'),
     continuousLegend(map, 'Smoke PM2.5 Contribution',
       smokePM.PMRamp, 0, '> 20',
-      'Jul-Oct Average, μg m⁻³, scaled by 100', 20.625, 308, true, 4, 1, 'main'),
+      'Jul-Oct Average, μg m⁻³, scaled by 100', 20.625, 311, true, 4, 1, 'main'),
     continuousLegend(map, 'OC + BC Emissions',
       smokePM.emissColRamp, 0, '> 5',
-      'Jul-Oct Average, μg m⁻² s⁻¹', 20.625, 315, false, 5, 1, 'main'),
+      'Jul-Oct Average, μg m⁻² s⁻¹', 20.625, 318, false, 5, 1, 'main'),
     continuousLegend(map, 'Population Density, 2005',
       smokeHealth.popColRamp, 0, '> 1000',
-      'people km⁻²', 20.625, 294, false, 6, 1, 'main'),
+      'people km⁻²', 20.625, 295, false, 6, 1, 'main'),
     continuousLegend(map, 'Design Scenario Mask',
-      smokePM.scenarioColRamp.reverse(), 0, 1,
-      'fraction of fire emissions reduced', 20.625, 328, false, 7, 0.4, 'main'),
+      smokePM.scenarioColRampRev, 0, 1,
+      'fraction of fire emissions reduced', 20.625, 331, false, 7, 0.4, 'main'),
     ui.Label('', {margin: '0 0 5px 0px'})
   ]);
 };

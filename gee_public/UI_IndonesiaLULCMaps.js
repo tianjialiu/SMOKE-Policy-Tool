@@ -6,7 +6,7 @@
 // *****************************************************************
 
 // @author Tianjia Liu (tianjialiu@g.harvard.edu)
-// Last updated: February 26, 2020
+// Last updated: February 23, 2024
 
 // UI LULC Maps adapted and modified from code by Gennadii Donchyts
 // (https://code.earthengine.google.com/f0011ae8554cf924176fd7a931a38add)
@@ -109,10 +109,10 @@ ui.root.setLayout(ui.Panel.Layout.Flow('vertical'));
 // Center the maps in Indonesia
 // Set url link based on map pan/zoom
 if (ui.url.get('lon') === undefined) {
-  maps[0].setCenter(105,-2,5);
+  maps[0].centerObject(ee.Geometry.Point(105,-2),5);
   ui.url.set({'lon':105,'lat':-2,'zoom':5});
 } else {
-  maps[0].setCenter(ui.url.get('lon'),ui.url.get('lat'),ui.url.get('zoom'));
+  maps[0].centerObject(ee.Geometry.Point(ui.url.get('lon'),ui.url.get('lat')),ui.url.get('zoom'));
 }
 
 maps[0].onChangeCenter(function(coord) {
